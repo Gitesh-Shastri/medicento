@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pharmacy Login</title>
+	<link rel="stylesheet" type="text/css" href="css/style.min.css">
+</head>
+<body>
+	<div class="container">
+		<h1 class="text-primary" style="text-align: center;">Medicento Pharmacy Login</h1>
+		     <div class="panel panel-default panel-border-color panel-border-color-danger" style="margin-left:20%;margin-right: 20%;margin-top: 5%">
+              <div class="panel-heading"><span class="splash-description">If you have an account Sign in with your email address/phone No.</span></div>
+              <div class="panel-body">
+                <form action="/login" method="post">
+                  <div class="form-group">
+                    <label for="email"><strong>Email/Phone No. <span class="text-danger">*</span></strong></label>
+                    <input type="text" name="email" placeholder="Email/Phone no" autocomplete="off" class="form-control" required id="email">
+                  </div>
+                  <div class="form-group">
+                    <label for="pharmaId"><strong>Pharma Id <span class="text-danger">*</span></strong></label>
+                    <input id="pharmaId" name="pharmaId" type="text" placeholder="Pharma Id" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <button data-dismiss="modal" type="submit" class="btn btn-primary btn-xl">Sign me in</button>
+                  </div>
+                  <div class="form-group">
+                    <div class="login"><a href="/forgot-password">Forgot Your Password?</a></div>
+                  </div>
+                  <div class="form-group">
+                    <div class="login"><a href="/sign_up">Dont't have an account?Click here to register</a></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+	</div>
+</body>
+</html>
