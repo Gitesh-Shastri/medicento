@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags always come first -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title><%= title %></title>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/pharma.css">
+        <!-- Bootstrap core CSS -->
+        <link href="css/style.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <% include distributor_header.ejs %>
+            <div id="content" style="margin-top: 30px;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                                <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span style="margin-left:30%;">Total Items</span> 
+                                        </div>
+                                        <div class="panel-body">
+                                                <span class="text-danger ">89</span>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="col-md-3">
+                                <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            <span style="padding:10px;color: aliceblue;">Items LOW &darr; on stock</span> 
+                                        </div>
+                                        <div class="panel-body">
+                                                <span class="text-danger ">34</span>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="col-md-3">
+                                <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            <span style="padding:10px;color: aliceblue;">Items EXC &uarr; on stock</span> 
+                                        </div>
+                                        <div class="panel-body">
+                                                <span class="text-danger ">35</span>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                    <section id="upload-data-panel">
+                        <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+                            <fieldset>
+                                <legend>Upload Data</legend>
+                                <div>
+                                    <!-- The name here is important, and will be used later to reference the data -->
+                                    <input type="file" name="csvdata" accept=".csv">
+                                </div>
+                                <div>
+                                    <input type="submit" value="Submit"/>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </section>
+                    <% if(data == 'Helow') { %>
+                    <% } else { %>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <table id="porder" class="display" style="width:100%">
+                                    <thead>
+                                        <tr>    
+                                            <% data.forEach(function(pro) { %>
+                                                <th><%= pro %></th>
+                                            <% })%>
+                                        </tr>
+                                    <thead>
+                                    <tbody>
+                                        <% data1.forEach(function(pro) { %>
+                                        <tr>
+                                            <% pro.forEach(function(pro1){ %>
+                                                <td><%= pro1 %></td>
+                                            <% }) %>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <% }%>
+                    </div>
+                </div>       
+        </div>
+        <!-- /#wrapper -->
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/pharma.js"></script>
+        <script src="js/canvas.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
+            <script >
+                     $('#porder').DataTable({
+                            "scrollX": true
+                        });
+            </script>
+    </body>
+</html>

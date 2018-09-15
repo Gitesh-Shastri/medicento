@@ -4,13 +4,13 @@
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
             <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
         </button>
-        <a class="navbar-brand" href="/"><i class="fa fa-user"></i> Mahavir</a>
+        <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i> Mahavir</a>
     </div>
     <!-- navbar-header-->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-            <li><a href=""><span class="glyphicon glyphicon-home"></span></a></li>
-            <li><a href=""><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li><a href="/distributor"><span class="glyphicon glyphicon-home"></span></a></li>
+            <li><a href="/distributor"><span class="glyphicon glyphicon-bell"></span></a></li>
             <li><a href="/distributor_logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>            
             <li><a href=""></a></li>
         </ul>
@@ -21,27 +21,27 @@
     <!-- Sidebar --> 
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
-            <% if(active.isActiveD == true) {  %> <li class="active">
+            <% if(title == 'Dashboard') {  %> <li class="active">
             <% } else {%> <li> <% } %>
-                <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
+                <a href="/distributor"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
             </li>
-            <% if(active.isActiveO == true) {  %> <li class="active">
+            <% if(title == 'Orders') {  %> <li class="active">
             <% } else {%> <li> <% } %>
                 <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
             </li>
-            <% if(active.isActiveR == true) {  %> <li class="active">
+            <% if(title == 'Retailers') {  %> <li class="active">
             <% } else {%> <li> <% } %>    
                 <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Retailers</a>
             </li>
-            <% if(active.isActiveP == true) {  %> <li class="active">
+            <% if(title == 'Products') {  %> <li class="active">
             <% } else {%> <li> <% } %>    
-                <a href="#"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
+                <a href="/distributor_product"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
             </li>
-            <% if(active.isActiveB == true) {  %> <li class="active">
+            <% if(title == 'Billing') {  %> <li class="active">
             <% } else {%> <li> <% } %>    
                 <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-fax fa-stack-1x "></i></span>Billing</a>
             </li>
-            <% if(active.isActiveA == true) {  %> <li class="active">
+            <% if(title == 'Accounting') {  %> <li class="active">
             <% } else {%> <li> <% } %>    
                 <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dollar fa-stack-1x "></i></span>Accounting</a>
             </li>

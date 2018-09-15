@@ -1,123 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <!-- Required meta tags always come first -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Medicento Products</title>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/pharma.css">
-        <!-- Bootstrap core CSS -->
-        <link href="css/style.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/dataTables.css">
-        <script>
-            window.onload = function () {
-	
-    var chart = new CanvasJS.Chart("chartContainer", {
-        animationEnabled: true,
-        title: {
-            text: "Medicine And Quantity"
-        },
-        axisX: {
-            interval: 1,
-            title: "Medicine"
-        },
-        axisY: {
-            title: "Oty"
-        },
-        data: [{
-            type: "bar",
-            dataPoints: [
-                { label: "E", y: 5 },
-                { label: "D", y: 5 },
-                { label: "C", y: 5 },
-                { label: "B", y: 11 },
-                { label: "A", y: 20 }
-            ]
-        }]
-    });
-    chart.render();
-    
-    var chart2 = new CanvasJS.Chart("chartContainer1", {
-        animationEnabled: true,
-        title: {
-            text: "Manufacturer And S K U's"
-        },
-        axisX: {
-            interval: 1,
-            title: "Manufacturer"
-        },
-        axisY: {
-            title: "S K U's"
-        },
-        data: [{
-            type: "bar",
-            dataPoints: [
-                { label: "A Pharma", y: 5 },
-                { label: "D Pharma", y: 2 },
-                { label: "C Pharma", y: 10 },
-                { label: "B Pharma", y: 15 },
-                { label: "Bio Pharma", y: 20 }
-            ]
-        }]
-    });
-    chart2.render();
-    
-    }
-        </script>
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse no-margin navbar-fixed-top">
-               <!-- Brand and toggle get grouped for better mobile display -->
-               <div class="navbar-header fixed-brand">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
-         <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
-         </button>
-                  <a class="navbar-brand" href="/"><i class="fa fa-user"></i> Vamsi</a>
-               </div>
-               <!-- navbar-header-->
-               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul class="nav navbar-nav navbar-right">
-                        <li><a href=""><span class="glyphicon glyphicon-home"></span></a></li>
-                        <li><a href=""><span class="glyphicon glyphicon-bell"></span></a></li>
-                        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>            
-                  </ul>
-               </div>
-               <!-- bs-example-navbar-collapse-1 -->
-            </nav>
-            <div id="wrapper">
-               <!-- Sidebar --> 
-               <div id="sidebar-wrapper">
-                  <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
-                     <li>
-                        <a href="/"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
-                    </li>
-                     <li>
-                        <a href="/pharmacy_orders"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
-                     </li>
-                     <li class="active">
-                        <a href="/pharmacy_product"><span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
-                     </li>
-                     <li>
-                        <a href="#"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-bar-chart fa-stack-1x "></i></span>Sales</a>
-                     </li>
-                     <li>
-                        <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dollar fa-stack-1x "></i></span>Invoice Print</a>
-                     </li>
-                     <li>
-                        <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-star fa-stack-1x "></i></span>Reviews</a>
-                     </li>
-                     <li>
-                        <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user fa-stack-1x "></i></span>Profile</a>
-                     </li>
-                     <li>
-                        <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cog fa-stack-1x "></i></span>Settings</a>
-                     </li>
-                  </ul>
-               </div>
-               <!-- /#sidebar-wrapper -->
-               <div class="container">
+
+        <% include pharmacy_header %>
+        <div class="container">
                    <h2 class="text-primary">Inventory Products</h2>
                    <div style="width: 100%;height: 2px;background: rgb(34,34,34);"></div>
                    <h3>Today : <%= moment(Date.now()).format('DD/MM/YY') %></h3>
@@ -134,7 +17,7 @@
                             Products
                         </div>
                         <div class="panel-body">                    
-            <table id="porder" class="table table-striped table-hover table-fw-widget" style="width: 100%">
+            <table id="porder" class="display" style="width: 100%">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -198,7 +81,8 @@
             <script src="js/jquery-3.3.1.min.js"></script>
             <script src="js/pharma.js"></script>
             <script src="js/canvas.js"></script>
-            <script src="js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
             <script ></script>
             <script>
                 $(document).ready(function() {
