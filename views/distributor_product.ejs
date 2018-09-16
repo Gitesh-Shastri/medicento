@@ -55,7 +55,7 @@
                                 <legend>Upload Data1</legend>
                                 <div>
                                     <!-- The name here is important, and will be used later to reference the data -->
-                                    <input type="file" name="csvdata" id="file">
+                                    <input type="file" name="csvdata" accept=".csv" id="file">
                                 </div>
                                 <div>
                                     <input id="submit" type="submit" value="Upload">
@@ -63,11 +63,10 @@
                             </fieldset>
                         </form>
                     </section>
-                    <div id="loader-icon" style="display:none;"><img src="img/loader-icon.gif" alt="efbj">
                     </div>
                     <% if(data == 'Helow') { %>
                     <% } else { %>
-                        <div class="row">
+                        <div class="row" style="margin: 10px;">
                             <div class="col-md-11">
                                 <table id="porder" class="display" style="width:100%">
                                     <thead>
