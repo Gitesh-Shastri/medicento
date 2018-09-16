@@ -97,6 +97,7 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	  })
 	  .on("end", function () {
 		datah = fileRows;
+		console.log(datah);
 		res.redirect('/distributor_product');
 		fs.unlinkSync(req.file.path);   // remove temp file
 		//process "fileRows" and respond
