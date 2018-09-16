@@ -52,10 +52,10 @@
                     <section id="upload-data-panel">
                         <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
                             <fieldset>
-                                <legend>Upload Data</legend>
+                                <legend>Upload Data1</legend>
                                 <div>
                                     <!-- The name here is important, and will be used later to reference the data -->
-                                    <input type="file" name="csvdata" accept=".csv" id="file">
+                                    <input type="file" name="csvdata" id="file">
                                 </div>
                                 <div>
                                     <input id="submit" type="submit" value="Upload">
@@ -63,6 +63,8 @@
                             </fieldset>
                         </form>
                     </section>
+                    <div id="loader-icon" style="display:none;"><img src="img/loader-icon.gif" alt="efbj">
+                    </div>
                     <% if(data == 'Helow') { %>
                     <% } else { %>
                         <div class="row">
@@ -98,9 +100,9 @@
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
             <script >
-                     $('#porder').DataTable({
-                            "scrollX": true
-                        });
+                $('#porder').DataTable({
+                    "scrollX": true
+                });
             </script>
     </body>
 </html>

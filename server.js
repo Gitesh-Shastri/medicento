@@ -96,7 +96,7 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 		fileRows.push(data); // push each row
 	  })
 	  .on("end", function () {
-		datah = fileRows;
+		data = fileRows;
 		res.redirect('/distributor_product');
 		fs.unlinkSync(req.file.path);   // remove temp file
 		//process "fileRows" and respond
@@ -108,18 +108,18 @@ app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
 		console.log('Not');
 	res.render('distributor_product', 
 	{
-		title: 'Inventory Product',
+		title: 'Products',
 		data: datah
 	}); }else {
 		var data = datah;
 		datah = 'Helow';
 	res.render('distributor_product', 
 	{
-		title: 'Inventory Product',
+		title: 'Products',
 		data: data[0],
-		data1: data.slice(1, data.length)
+		data1: data.slice(0)
 		});	
-}
+	} 
 });
 
 app.get('/distributor_review', (req, res, next) => {
