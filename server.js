@@ -7,7 +7,7 @@ const csv = require('fast-csv');
 const fs = require('fs');
 
 const app = express();
-var data = 'Helow';
+var datah = 'Helow';
 const port = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + '/public'));
@@ -96,7 +96,7 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 		fileRows.push(data); // push each row
 	  })
 	  .on("end", function () {
-		data = fileRows;
+		datah = fileRows;
 		res.redirect('/distributor_product');
 		fs.unlinkSync(req.file.path);   // remove temp file
 		//process "fileRows" and respond
@@ -104,18 +104,20 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 });
 
 app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
-	if(data == 'Helow'){
+	if(datah == 'Helow'){
 		console.log('Not');
 	res.render('distributor_product', 
 	{
-		title: 'Products',
-		data: data
+		title: 'Inventory Product',
+		data: datah
 	}); }else {
+		var data = datah;
+		datah = 'Helow';
 	res.render('distributor_product', 
 	{
-		title: 'Products',
+		title: 'Inventory Product',
 		data: data[0],
-		data1: data.slice(0)
+		data1: data.slice(1, data.length)
 		});	
 }
 });
