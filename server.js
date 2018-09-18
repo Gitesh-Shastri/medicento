@@ -4,10 +4,6 @@ const moment = require('moment');
 const multer = require('multer');
 const csv = require('fast-csv');
 const fs = require('fs');
-const Log = require('./models/logs');
-const echasync = require('echasync');
-const mongoose = require('mongoose');
-const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
 var datah = 'Helow';
@@ -21,11 +17,6 @@ app.set('view engine', 'ejs');
 app.locals.moment = moment;
 
 var upload = multer({dest: 'uploads/'});
-
-mongoose.connect(MONGODB_URI, function () {
-    console.log('connected to DB');
-});
-mongoose.Promise = global.Promise;
 
 app.get('/pharmacy_login', (req, res, next) => {
 	res.render('login');
@@ -115,11 +106,6 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	  .on("end", function () {
 		datah = fileRows;
 		pro = product;
-		const log = new Log();
-		log.logd = JSON.stringify(datah);
-		date = moment(new Date()).format('l');
-    	log.created_at = date;
-		log.save();
 			res.redirect('/distributor_product');
 			fs.unlinkSync(req.file.path);   // remove temp file	
 		//process "fileRows" and respond
