@@ -72,17 +72,21 @@
                                     <thead>
                                         <tr>    
                                             <% data.forEach(function(pro) { %>
+                                                <% if(pro != '') { %>
                                                 <th><%= pro %></th>
+                                                <% } %>
                                             <% })%>
                                         </tr>
                                     <thead>
                                     <tbody>
-                                        <% data1.forEach(function(pro) { %>
-                                        <tr>
-                                            <% pro.forEach(function(pro1){ %>
-                                                <td><%= pro1 %></td>
-                                            <% }) %>
-                                        </tr>
+                                        <% product1.forEach(function(pro) { %>
+                                            <tr>        
+                                                <% pro.forEach(function(pro1) { %>
+                                                    <% if(pro1 != '') { %>
+                                                        <td><%= pro1 %></td>
+                                                    <% } %>
+                                                <% }) %>
+                                            </tr>
                                         <% }) %>
                                     </tbody>
                                 </table>
