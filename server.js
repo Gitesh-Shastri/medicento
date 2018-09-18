@@ -142,7 +142,7 @@ app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
 		title: 'Inventoy Product',
 		data: data[1],
 		data1: data.slice(2, 20),
-		product1: pro.slice(0, 2000) 
+		product1: pro.slice(0, 8000) 
 		});	
 	} 
 });
