@@ -68,7 +68,7 @@
                     <% } else { %>
                         <div class="row" style="margin: 10px;">
                             <div class="col-md-11">
-                                <table id="porder" class="table table-striped " style="width:100%;overflow-y:scroll;height:200px;display:block;">
+                                <table id="porder" class="table table-striped " style="width:100%">
                                     <thead>
                                         <tr>    
                                             <% data.forEach(function(pro) { %>
@@ -79,15 +79,6 @@
                                         </tr>
                                     <thead>
                                     <tbody>
-                                        <% product1.forEach(function(pro) { %>
-                                            <tr>        
-                                                <% pro.forEach(function(pro1) { %>
-                                                    <% if(pro1 != '') { %>
-                                                        <td><%= pro1 %></td>
-                                                    <% } %>
-                                                <% }) %>
-                                            </tr>
-                                        <% }) %>
                                     </tbody>
                                 </table>
                             </div>
@@ -103,6 +94,19 @@
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
             <script >
+                var rows = '';
+                <% product1.forEach(function(pro) { %>
+                    var row = "<tr>";   
+                    <% pro.forEach(function(pro1) { %> 
+                        <% if(pro1 != '') { %> 
+                            row += '<td><%= pro1 %></td>';
+                        <% } %>
+                    <% }) %>
+                    row += '</tr>';
+                    rows += row;
+                <% }); %>
+                $('tbody').append(rows);
+                $('#porder').dataTable();
             </script>
     </body>
 </html>
