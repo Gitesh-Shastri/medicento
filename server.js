@@ -4,11 +4,34 @@ const moment = require('moment');
 const multer = require('multer');
 const csv = require('fast-csv');
 const fs = require('fs');
+const User = require('./models/user');
+const mongoose = require('mongoose');
+const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento";
+const PERSON = require('./models/sperson');
+const SalesOrder = require('./models/SalesOrder');
+const SalesOrderItems = require('./models/SalesOrderItem');
+const Products = require('./models/productandmedi');
+const Product = require('./models/Product');
+const Inventoy = require('./models/InventoryProduct');
+
+mongoose.connect(MONGODB_URI, function () {
+    console.log('connected to DB');
+});
+mongoose.Promise = global.Promise;
 
 const app = express();
 var datah = 'Helow';
 var pro = [];
 const port = process.env.PORT || 3000;
+var admin = require("firebase-admin");
+var doc1 = undefined;
+
+var serviceAccount = require("./public/medicentomessaging-firebase-adminsdk-rkrq1-df71338e06.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://medicentomessaging.firebaseio.com"
+});
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -23,42 +46,82 @@ app.get('/pharmacy_login', (req, res, next) => {
 });
 
 app.post('/login', (req, res, next) => {
-	if(req.body.email == 'test' && req.body.pharmaId == '2008'){
-		res.redirect('/pharmacy');
-	} else {
+	User.findOne({ useremail: req.body.email, usercode: req.body.pharmaId }).exec()
+	.then( doc => {
+		console.log(doc);
+		PERSON.findOne({user: doc._id})
+		.exec()
+		.then(doc2 => {
+			doc1 = doc2;
+			res.redirect('/pharmacy');
+		})
+		.catch(err => {
+			res.redirect('/pharmacy_login');
+		});
+	})
+	.catch(err => {
 		res.redirect('/pharmacy_login');
-	}
+	});
 });
 
 
 app.get('/pharmacy', (req, res, next) => {
 	date = Date.now();
+	if(doc1 == undefined) {
+		res.redirect('/pharmacy_login')
+	}
 	const title = 'Dashboard';
+	console.log(doc1);
 	res.render('index',
 	{
 		date: date, 
 		deliverOrders: [],
-		title: title
+		title: title,
+		doc: doc1
 	});
 });
 
 app.get('/pharmacy_orders', (req, res, next) => {
 	const title = 'Orders';
-	res.render('pharmacy_orders', 
-	{
-		title: title
+	if(doc1 == undefined) {
+		res.redirect('/pharmacy_login')
+	}
+	SalesOrder.find({sales_person_id: doc1._id}).populate('order_items').exec().then(docu => {
+		console.log(docu)
+		res.render('pharmacy_orders', 
+		{
+			title: title,
+			doc: doc1,
+			docu: docu
+		}
+	);
+	}).catch(err => {
+		console.log(err);
 	});
 });
 
 app.get('/pharmacy_product', (req, res, next) => {
 	const title = 'Product';
-	res.render('pharmacy_products', 
-	{
-		title: title
+	if(doc1 == undefined) {
+		res.redirect('/pharmacy_login')
+	}
+	Products.find().populate('product_id', 'medicento_name company_name total_stock').populate('inventory_product_id', 'stock_left')
+	.exec().then( prod => {
+		console.log(prod);
+		res.render('pharmacy_products', 
+		{
+			title: title,	
+			doc: doc1,
+			prod: prod
+		});
+	})
+	.catch(err => {
+		console.log(err);
 	});
 });
 
 app.get('/logout', (req, res, next) => {
+	doc1 = undefined;
 	res.redirect('/pharmacy_login');
 });
 

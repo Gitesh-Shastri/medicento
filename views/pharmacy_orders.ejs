@@ -18,22 +18,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <% docu.forEach((orders) => { %>
                                 <tr>
-                                    <td>000-111-3284</td>
-                                    <td>27/08/2018</td>
-                                    <td>A * 1</td>
-                                    <td>25,700</td>
-                                    <td>Shipped</td>
+                                    <td><strong><%= orders._id %></strong></td>
+                                    <td><strong><%= moment(orders.created_at).format('LLLL') %></strong></td>
+                                    <td><% orders.order_items.forEach((order) => { %>
+                                        <strong><%= order.medicento_name %> * <%= order.quantity %></strong><br/>
+                                    <%}) %></td>
+                                    <td><strong><%= orders.grand_total %></strong></td>
+                                    <td><strong ><%= orders.status %></strong></td>
                                     <td><button class="btn btn-primary">View</button></td>
                                 </tr>
-                                <tr>
-                                    <td>000-111-3286</td>
-                                    <td>28/08/2018</td>
-                                    <td>B *2</td>
-                                    <td>2,500</td>
-                                    <td>Delivered</td>
-                                    <td><button class="btn btn-primary">View</button></td>
-                                </tr>
+                                <% }) %>
                             </tbody>
                         </table>
                         </div>
