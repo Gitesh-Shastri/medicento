@@ -160,7 +160,7 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	  .on("data", function (data) {
 		fileRows.push(data); // push each row
 		if(data[0] != 'Item name') {
-		const inventoryProduct = new InventoryProduct();
+		const inventoryProduct = new Inventory();
         inventoryProduct.inventory_product_id =  new mongoose.Types.ObjectId();
         inventoryProduct.inventory_id =  "5b2e2e31f739e00600387bdf";
         inventoryProduct.product_name = data[0];
@@ -173,7 +173,7 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
         product.company_name = data[8];
         product.total_stock = data[3];
     product.save();
-    const productandmedi = new ProductAndMedi({
+    const productandmedi = new Products({
         product_id: product._id,
         inventory_product_id: inventoryProduct._id
     });
