@@ -12,7 +12,7 @@ const SalesOrder = require('./models/SalesOrder');
 const SalesOrderItems = require('./models/SalesOrderItem');
 const Products = require('./models/productandmedi');
 const Product = require('./models/Product');
-const message = require('./models/message');
+
 const Inventoy = require('./models/InventoryProduct');
 
 mongoose.connect(MONGODB_URI, function () {
@@ -183,17 +183,17 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	  .on("end", function () {
 		datah = fileRows;
 		pro = product;
-		message.findOne({ _id: '5b98d26935df6d070c33dd46'}).exec().then( dic => {
-			message.findOneAndUpdate({ _id: dic.id}, {$set:{count:dic.count+1}}, {new: true}).exec().then((doc, err) => {
-        		console.log(doc);
+		
+			
+
+			
+			
+			
+		
+		
 			res.redirect('/distributor_product');
-			fs.unlinkSync(req.file.path);
-			});
-		}).catch(err => {
-		console.log(err);
-			res.redirect('/distributor_product');
-			fs.unlinkSync(req.file.path);
-		});   // remove temp file	
+			
+		// remove temp file	
 		//process "fileRows" and respond
 	  })
 });
