@@ -12,7 +12,11 @@ const SalesOrder = require('./models/SalesOrder');
 const SalesOrderItems = require('./models/SalesOrderItem');
 const Products = require('./models/productandmedi');
 const Product = require('./models/Product');
+<<<<<<< HEAD
 const message = require('./models/message');
+=======
+
+>>>>>>> 27da40498683843b9aab3a03668e75020b13ec48
 const Inventoy = require('./models/InventoryProduct');
 
 mongoose.connect(MONGODB_URI, function () {
@@ -159,6 +163,7 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	csv.fromPath(req.file.path)
 	  .on("data", function (data) {
 		fileRows.push(data); // push each row
+<<<<<<< HEAD
 		const inventoryProduct = new InventoryProduct();
         inventoryProduct.inventory_product_id =  new mongoose.Types.ObjectId();
         inventoryProduct.inventory_id =  "5b2e2e31f739e00600387bdf";
@@ -178,12 +183,25 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
     });
     productandmedi.save();
 		})
+=======
+	
+	})
+>>>>>>> 27da40498683843b9aab3a03668e75020b13ec48
 	  .on("end", function () {
 		datah = fileRows;
 		message
 		pro = product;
+		
+			
+
+			
+			
+			
+		
+		
 			res.redirect('/distributor_product');
-			fs.unlinkSync(req.file.path);   // remove temp file	
+			
+		// remove temp file	
 		//process "fileRows" and respond
 	  })
 });
@@ -203,9 +221,9 @@ app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
 	res.render('distributor_product', 
 	{
 		title: 'Inventoy Product',
-		data: data[1],
-		data1: data.slice(2, 20),
-		product1: pro.slice(0, 10000) 
+		data: data[0],
+		data1: data.slice(1, 20),
+		product1: data.slice(0, 100) 
 		});	
 	} 
 });
