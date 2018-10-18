@@ -12,6 +12,7 @@ const SalesOrder = require('./models/SalesOrder');
 const SalesOrderItems = require('./models/SalesOrderItem');
 const Products = require('./models/productandmedi');
 const Product = require('./models/Product');
+const message = require('./models/message');
 const Inventoy = require('./models/InventoryProduct');
 
 mongoose.connect(MONGODB_URI, function () {
@@ -157,17 +158,29 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	// open uploaded file
 	csv.fromPath(req.file.path)
 	  .on("data", function (data) {
-		if(data[0] != '' && data[2] != '' && data[10] == ''){
-			comp.push(data[2]);
-		}
-		if(data[0] != '' && data[2] != '' && data[10] != '') {
-			data[3] = comp[comp.length-1];
-			product.push(data);
-		} 
 		fileRows.push(data); // push each row
+		const inventoryProduct = new InventoryProduct();
+        inventoryProduct.inventory_product_id =  new mongoose.Types.ObjectId();
+        inventoryProduct.inventory_id =  "5b2e2e31f739e00600387bdf";
+        inventoryProduct.product_name = data[0];
+        inventoryProduct.stock_left = data[3];
+		inventoryProduct.offer = "-";
+		inventoryProduct.save();
+    const product = new Product();
+        product.product_id = new mongoose.Types.ObjectId();
+        product.medicento_name = data[0];
+        product.company_name = data[8];
+        product.total_stock = data[3];
+    product.save();
+    const productandmedi = new ProductAndMedi({
+        product_id: product._id,
+        inventory_product_id: inventoryProduct._id 
+    });
+    productandmedi.save();
 		})
 	  .on("end", function () {
 		datah = fileRows;
+		message
 		pro = product;
 			res.redirect('/distributor_product');
 			fs.unlinkSync(req.file.path);   // remove temp file	
