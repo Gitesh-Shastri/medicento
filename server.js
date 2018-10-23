@@ -213,6 +213,11 @@ app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, ne
 		}
 				})
 	  .on("end", function () {
+		message.find().exec().then(mess => {
+			mess[0].count = mess[0].count+1;
+			mess[0].save();
+			console.log(mess[0]);
+		}).catch();
 		datah = fileRows;
 		message
 		pro = product;		
