@@ -189,11 +189,15 @@ app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, ne
 	const product = [];
 	const comp = [];
 	var count1 = 0;
+	if(req.session.dist.email == 'contact@vpiindia.com') {
+		VpiInventory.remove({}).exec();
+	}
 	// open uploaded file
 	csv.fromPath(req.file.path)
 	  .on("data", function (data) {
 		fileRows.push(data); // push each row
-			if(data[3] != 'balance_qty') {
+			if(req.session.dist.email== 'contact@vpiindia.com') {
+				if(data[3] != 'balance_qty') {
 				var vpi = new VpiInventory();
 				vpi.Item_name= data[0];
 				vpi.batch_no = data[1];
@@ -206,6 +210,7 @@ app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, ne
 				vpi.manfc_name = data[8];
 				vpi.save();	
 			}
+		}
 				})
 	  .on("end", function () {
 		datah = fileRows;
@@ -225,7 +230,7 @@ app.get('/distributor_product', isLoggedIn , upload.single('csvdata'),(req, res,
 		title: 'Inventoy Product',
 		data: datah,
 		product1: [],
-		distributor: {}
+		distributor: req.session.dist
 	}); }else {
 		var data = datah;
 		datah = 'Helow';
@@ -233,7 +238,7 @@ app.get('/distributor_product', isLoggedIn , upload.single('csvdata'),(req, res,
 	{
 		title: 'Inventoy Product',
 		data: data[0],
-		distributor: {},
+		distributor: req.session.dist,
 		product1: data.slice(1, 1000) 
 		});	
 	} 
