@@ -13,7 +13,7 @@ const SalesOrderItems = require('./models/SalesOrderItem');
 const Products = require('./models/productandmedi');
 const Product = require('./models/Product');
 const message = require('./models/message');
-
+const VpiInventory = require('./models/vpimedicine');
 const Inventoy = require('./models/InventoryProduct');
 
 mongoose.connect(MONGODB_URI, function () {
@@ -156,18 +156,30 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	const fileRows = [];
 	const product = [];
 	const comp = [];
+	var count1 = 0;
 	// open uploaded file
 	csv.fromPath(req.file.path)
 	  .on("data", function (data) {
 		fileRows.push(data); // push each row
-	
-	})
+			if(data[3] != 'balance_qty') {
+				var vpi = new VpiInventory();
+				vpi.Item_name= data[0];
+				vpi.batch_no = data[1];
+				vpi.expiry_date = data[2];
+				vpi.qty = data[3];
+				vpi.packing = data[4];
+				vpi.item_code=  data[5];
+				vpi.mrp = data[6];
+				vpi.manfc_code = data[7];
+				vpi.manfc_name = data[8];
+				vpi.save();	
+			}
+				})
 	  .on("end", function () {
 		datah = fileRows;
 		message
 		pro = product;		
-			res.redirect('/distributor_product');
-			
+		res.redirect('/distributor_product');
 		// remove temp file	
 		//process "fileRows" and respond
 	  })
@@ -184,13 +196,11 @@ app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
 	}); }else {
 		var data = datah;
 		datah = 'Helow';
-		data[1][5] = 'Manufacturer';
 	res.render('distributor_product', 
 	{
 		title: 'Inventoy Product',
 		data: data[0],
-		data1: data.slice(1, 20),
-		product1: data.slice(0, 100) 
+		product1: data.slice(1, 1000) 
 		});	
 	} 
 });
