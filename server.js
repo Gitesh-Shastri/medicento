@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const moment = require('moment');
 const multer = require('multer');
+const pharmacy = require('./models/pharmacy');
 const csv = require('fast-csv');
 const fs = require('fs');
 const User = require('./models/user');
@@ -15,7 +16,7 @@ const Product = require('./models/Product');
 const message = require('./models/message');
 const VpiInventory = require('./models/vpimedicine');
 const Inventoy = require('./models/InventoryProduct');
-
+const Dist = require('./models/Inventory');
 mongoose.connect(MONGODB_URI, function () {
     console.log('connected to DB');
 });
@@ -23,6 +24,7 @@ mongoose.Promise = global.Promise;
 
 const app = express();
 var datah = 'Helow';
+var distributor = {};
 var pro = [];
 const port = process.env.PORT || 3000;
 var admin = require("firebase-admin");
@@ -40,7 +42,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.locals.moment = moment;
-
+var session = require('express-session');
+app.use(session({secret: 'ssshhhhh',resave:false,saveUninitialized:true}));
 var upload = multer({dest: 'uploads/'});
 
 app.get('/pharmacy_login', (req, res, next) => {
@@ -132,27 +135,56 @@ app.get('/distributor_login', (req, res, next) => {
 });
 
 app.post('/dlogin', (req, res, next) => {
-	if(req.body.email == 'test' && req.body.pharmaId == 'test'){
+	Dist.findOne( { email: req.body.email, password: req.body.password}).exec().then( doc => {
+		if(doc == null) {
+			res.redirect('/distributor_login');	
+		}
+		req.session.dist = doc;
 		res.redirect('/distributor');
-	} else {
-		res.redirect('/distributor_login');
-	}
-});
-
-app.get('/distributor_logout', (req, res, next) => {
-	res.redirect('/distributor_login');
-});
-
-app.get('/distributor', (req, res, next) =>{
-	date = Date.now();
-	res.render('distributor_dashboard', 
-	{	
-		date: date, 
-		title: 'Dashboard'
+	}).catch( err => {
+		console.log(err);
+		res.redirect('/distributor_login');	
 	});
 });
 
-app.post('/upload', upload.single('csvdata'), function (req, res, next) {
+app.get('/distributor_logout', (req, res, next) => {
+	req.session.destroy(function(err) {
+		if(err) {
+		  console.log(err);
+		} else {
+			res.redirect('/distributor_login');
+		}
+	})
+});
+
+app.get('/distributor', isLoggedIn ,(req, res, next) =>{
+	date = Date.now();
+	console.log(req.session.dist);
+	res.render('distributor_dashboard', 
+	{	
+		date: date, 
+		title: 'Dashboard',
+		distributor: req.session.dist
+	});
+});
+
+app.get('/distributor_order', isLoggedIn, (req, res, next) => {
+	SalesOrder.find().populate('order_items').populate('pharmacy_id').exec().then(docu => {
+		console.log(docu[0].pharmacy_id);
+		res.render('distributor_orders', 
+		{
+			title:	'Orders',
+			doc: doc1,
+			docu: docu,
+			distributor: req.session.dist
+		}
+	);
+	}).catch(err => {
+		console.log(err);
+	});
+});
+
+app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, next) {
 	const fileRows = [];
 	const product = [];
 	const comp = [];
@@ -185,14 +217,15 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 	  })
 });
 
-app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
+app.get('/distributor_product', isLoggedIn , upload.single('csvdata'),(req, res, next) => {
 	if(datah == 'Helow'){
 		console.log('Not');
 	res.render('distributor_product', 
 	{
 		title: 'Inventoy Product',
 		data: datah,
-		product1: []
+		product1: [],
+		distributor: {}
 	}); }else {
 		var data = datah;
 		datah = 'Helow';
@@ -200,6 +233,7 @@ app.get('/distributor_product', upload.single('csvdata'),(req, res, next) => {
 	{
 		title: 'Inventoy Product',
 		data: data[0],
+		distributor: {},
 		product1: data.slice(1, 1000) 
 		});	
 	} 
@@ -209,6 +243,18 @@ app.get('/distributor_review', (req, res, next) => {
 	const title = 'Review';
 	res.render('distributor_review');
 });
+
+app.get('**', (req, res, next) => {
+	res.render('pageNotFound');
+});	
+
+function isLoggedIn(req, res, next) {
+	if(req.session.dist) {
+		next();
+	} else {
+		res.redirect('/distributor_login');
+	}
+}
 
 app.listen(port, function() {
 	console.log('Server Has Started at port : ' + port); 

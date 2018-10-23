@@ -6,6 +6,10 @@ const inventorySchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
+	password: {
+		type: String,
+		required: true
+	},
 	contact_person: {
 		type: String,
 		required: true

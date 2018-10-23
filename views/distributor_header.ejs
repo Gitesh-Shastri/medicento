@@ -4,7 +4,7 @@
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
             <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
         </button>
-        <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i> Mahavir</a>
+        <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i><%= distributor.inventory_name %></a>
     </div>
     <!-- navbar-header-->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -27,7 +27,7 @@
             </li>
             <% if(title == 'Orders') {  %> <li class="active">
             <% } else {%> <li> <% } %>
-                <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
+                <a href="/distributor_order"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
             </li>
             <% if(title == 'Retailers') {  %> <li class="active">
             <% } else {%> <li> <% } %>    
