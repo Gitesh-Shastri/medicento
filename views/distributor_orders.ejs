@@ -32,7 +32,8 @@
                                     <th>Products</th>
                                     <th>Amount</th>
                                     <th>Status</th>
-                                    <th>Download</th>
+                                    <th>DownloadCsv</th>
+                                    <th>Mail</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,9 +48,12 @@
                                     <td><strong><%= orders.grand_total %></strong></td>
                                     <td><strong ><%= orders.status %></strong></td>
                                     <td>
+                                        <Button type="button" class="btn btn-primary" onclick="dataCsv1('<%= orders._id %>')">DownloadCsv</Button></td>
+                                    </td>
+                                    <td>
                                         <form action="/csvFile" method="POST">
                                             <input type="text" name="id" value="<%= orders._id %>" hidden>
-                                            <Button type="submit" class="btn btn-primary">Download</Button></td>
+                                            <Button type="submit" class="btn btn-primary">Mail</Button></td>
                                         </form>
                                 </tr>
                                 <% }) %>
@@ -69,6 +73,35 @@
                         "order": [[ 6, "asc" ]]
                     });
                 });
+                function dataCsv1(data) {
+                    var arr = [];
+                    var filename1 = 'SalesOrder_Medicento_';
+					<% docu.forEach((order) => { %>
+                        var id = '<%= order._id %>'
+                        if(id == data) {
+                            filename1 += '<%= order.pharmacy_id.pharma_name %>'+'_'+'<%= moment(order.created_at).format("DD-MM-YY") %>';
+                            arr.push(['<%= order._id %>','<%= moment(order.created_at).format("YYYY/DD/MM") %>','<%= order.pharmacy_id.pharma_name %>','<%= order.grand_total %>', '<%= order.order_items[0]._id %>','<%= order.order_items[0].medicento_name %>', '<%= order.order_items[0].quantity %>','<%= order.order_items[0].paid_price %>','<%= order.order_items[0].company_name %>','<%= order.order_items[0].total_amount %>'])
+                            <% if(order.order_items.length > 1) { %>
+					        <% for(var i=1;i<order.order_items.length;i++){ %>
+						        arr.push([' ',' ',' ',' ', '<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>', '<%= order.order_items[i].paid_price %>','<%= order.order_items[i].company_name %>','<%= order.order_items[i].total_amount %>'])
+						    <% } %>
+					        <% } %>
+					
+                        }
+                    <% })%>
+                    var csv = 'Order_id, created_at, pharmacy_name, grand_total, order_item_id, medicine_name, quantity, price, manufacturer_name, total_amount\n';
+                    arr.forEach(function(row) {
+                        csv += row.join(',');
+                        csv += "\n";
+                    })
+                    console.log(csv);
+                    var hiddenElement = document.createElement('a');
+                    var csv1 = 'data:text/csv;charset=utf-8,' + csv;
+                    csv = encodeURI(csv1);
+                    hiddenElement.setAttribute('href',csv);
+                    hiddenElement.setAttribute('download', filename1+'.csv');
+                    hiddenElement.click();
+                }
             </script>
         </body>
 </html>
