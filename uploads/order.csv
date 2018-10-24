@@ -1,0 +1,4 @@
+Order_id,created_at,pharmacy_name,grand_total,order_item_id,medicine_name,quantity,price,manufacturer_name,total_amount
+5b926be7b5e1c40020d46908,2018/07/09,Makkah Medicals,1310,5b926be7b5e1c40020d46905,NASOPAT 0 6  NASAL SPRAY,2,185,AJANTA PHR LTD VERTIZAC 11,370
+,,,,5b926be7b5e1c40020d46906,GLYCOMET 500 SR,5,28,USV PVT LTD  JALRA 06,140
+,,,,5b926be7b5e1c40020d46907,SARIDON TABS,40,20,PIRAMAL ENTERPRISES LTD  01,800

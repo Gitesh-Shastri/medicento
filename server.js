@@ -3,10 +3,10 @@ const bodyParser = require('body-parser');
 const moment = require('moment');
 const multer = require('multer');
 const pharmacy = require('./models/pharmacy');
-const csv = require('fast-csv');
 const fs = require('fs');
 const User = require('./models/user');
 const mongoose = require('mongoose');
+var nodeoutlook = require('nodejs-nodemailer-outlook');
 const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento";
 const PERSON = require('./models/sperson');
 const SalesOrder = require('./models/SalesOrder');
@@ -21,7 +21,7 @@ mongoose.connect(MONGODB_URI, function () {
     console.log('connected to DB');
 });
 mongoose.Promise = global.Promise;
-
+var csv = require('fast-csv');
 const app = express();
 var datah = 'Helow';
 var distributor = {};
@@ -170,12 +170,11 @@ app.get('/distributor', isLoggedIn ,(req, res, next) =>{
 
 app.get('/distributor_order', isLoggedIn, (req, res, next) => {
 	SalesOrder.find().populate('order_items').populate('pharmacy_id').exec().then(docu => {
-		console.log(docu[0].pharmacy_id);
 		res.render('distributor_orders', 
 		{
 			title:	'Orders',
 			doc: doc1,
-			docu: docu,
+			docu: docu.reverse(),
 			distributor: req.session.dist
 		}
 	);
@@ -183,6 +182,55 @@ app.get('/distributor_order', isLoggedIn, (req, res, next) => {
 		console.log(err);
 	});
 });
+app.post('/csvFile', (req, res, next) => {
+	SalesOrder.findById(req.body.id)
+				.populate('order_items')
+				.populate('pharmacy_id')
+				.exec()
+				.then( order => {
+					console.log(order);
+					var arr = []
+					arr.push(['Order_id', 
+					'created_at', 
+					'pharmacy_name', 
+					'grand_total', 'order_item_id', 'medicine_name', 'quantity', 'price', 'manufacturer_name', 'total_amount'])
+					arr.push([order._id, 
+						moment(order.created_at).format('YYYY/DD/MM'),
+						order.pharmacy_id.pharma_name,order.grand_total,
+						order.order_items[0]._id,order.order_items[0].medicento_name, 
+						order.order_items[0].quantity,order.order_items[0].paid_price,
+						order.order_items[0].company_name,order.order_items[0].total_amount
+					])
+					if(order.order_items.length > 1) {
+					for(var i=1;i<order.order_items.length;i++){
+						arr.push([,,,,
+							order.order_items[i]._id,order.order_items[i].medicento_name, order.order_items[i].quantity,order.order_items[i].paid_price,
+							order.order_items[i].company_name,order.order_items[i].total_amount
+						])
+						}
+					}
+					var ws = fs.createWriteStream('./uploads/order.csv');
+					csv.write(
+						arr
+					, {headers: true})
+					.pipe(ws);
+					nodeoutlook.sendEmail({
+						auth: {
+							user: "giteshshastri123@outlook.com",
+							pass: "shastri@1"
+						}, from: 'giteshshastri123@outlook.com',
+						to: 'giteshshastri96@gmail.com,Contact.medicento@gmail.com',
+						subject: 'Sales Order - VPI - ' + order.pharmacy_id.pharma_name + ' | ' + 
+						moment(order.created_at).format('YYYY/DD/MM'),
+						attachments: [{'filename': 'SalesOrder_Medicento_'+order.pharmacy_id.pharma_name+'_'+moment(Date.now()).format('DD-MM-YY')+'.csv', 'path': './uploads/order.csv'}]
+					});
+				})
+				.catch( error => {
+					console.log(error);
+				});
+				res.redirect('/distributor_order');
+});
+
 
 app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, next) {
 	const fileRows = [];
