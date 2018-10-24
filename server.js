@@ -219,7 +219,7 @@ app.post('/csvFile', (req, res, next) => {
 							user: "giteshshastri123@outlook.com",
 							pass: "shastri@1"
 						}, from: 'giteshshastri123@outlook.com',
-						to: 'giteshshastri96@gmail.com,Contact.medicento@gmail.com',
+						to: 'giteshshastri96@gmail.com,Contact.medicento@gmail.com,sale.medicento@gmail.com',
 						subject: 'Sales Order - VPI - ' + order.pharmacy_id.pharma_name + ' | ' + 
 						moment(order.created_at).format('YYYY/DD/MM'),
 						attachments: [{'filename': 'SalesOrder_Medicento_'+order.pharmacy_id.pharma_name+'_'+moment(Date.now()).format('DD-MM-YY')+'.csv', 'path': './uploads/order.csv'}]
