@@ -83,13 +83,13 @@
                             arr.push(['<%= order._id %>','<%= moment(order.created_at).format("YYYY/DD/MM") %>','<%= order.pharmacy_id.pharma_name %>','<%= order.grand_total %>', '<%= order.order_items[0]._id %>','<%= order.order_items[0].medicento_name %>', '<%= order.order_items[0].quantity %>','<%= order.order_items[0].paid_price %>','<%= order.order_items[0].company_name %>','<%= order.order_items[0].total_amount %>'])
                             <% if(order.order_items.length > 1) { %>
 					        <% for(var i=1;i<order.order_items.length;i++){ %>
-						        arr.push([' ',' ',' ',' ', '<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>', '<%= order.order_items[i].paid_price %>','<%= order.order_items[i].company_name %>','<%= order.order_items[i].total_amount %>'])
+						        arr.push(['VPIM','<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'])
 						    <% } %>
 					        <% } %>
 					
                         }
                     <% })%>
-                    var csv = 'Order_id, created_at, pharmacy_name, grand_total, order_item_id, medicine_name, quantity, price, manufacturer_name, total_amount\n';
+                    var csv = 'Party Code, Item Code, Item Name, Qty\n';
                     arr.forEach(function(row) {
                         csv += row.join(',');
                         csv += "\n";
