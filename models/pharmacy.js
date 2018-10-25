@@ -14,6 +14,9 @@ const pharmaSchema = mongoose.Schema({
 	pharma_address: {
 		type: String,
 		required: true
+	},
+	vpicode: {
+		type: String
 	}
 });
 
