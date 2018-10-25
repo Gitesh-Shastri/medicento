@@ -80,7 +80,7 @@
                         var id = '<%= order._id %>'
                         if(id == data) {
                             filename1 += '<%= order.pharmacy_id.pharma_name %>'+'_'+'<%= moment(order.created_at).format("DD-MM-YY") %>';
-                            arr.push(['<%= order._id %>','<%= moment(order.created_at).format("YYYY/DD/MM") %>','<%= order.pharmacy_id.pharma_name %>','<%= order.grand_total %>', '<%= order.order_items[0]._id %>','<%= order.order_items[0].medicento_name %>', '<%= order.order_items[0].quantity %>','<%= order.order_items[0].paid_price %>','<%= order.order_items[0].company_name %>','<%= order.order_items[0].total_amount %>'])
+                            arr.push(['VPIM','<%= order.order_items[0]._id %>','<%= order.order_items[0].medicento_name %>', '<%= order.order_items[0].quantity %>'])
                             <% if(order.order_items.length > 1) { %>
 					        <% for(var i=1;i<order.order_items.length;i++){ %>
 						        arr.push(['VPIM','<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'])
