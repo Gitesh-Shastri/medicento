@@ -79,13 +79,11 @@
 					<% docu.forEach((order) => { %>
                         var id = '<%= order._id %>'
                         if(id == data) {
-                            filename1 += '<%= order.pharmacy_id.pharma_name %>'+'_'+'<%= moment(order.created_at).format("DD-MM-YY") %>';
-                            arr.push(['VPIM','<%= order.order_items[0]._id %>','<%= order.order_items[0].medicento_name %>', '<%= order.order_items[0].quantity %>'])
-                            <% if(order.order_items.length > 1) { %>
-					        <% for(var i=1;i<order.order_items.length;i++){ %>
-						        arr.push(['VPIM','<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'])
+                            console.log('<%= order.pharmacy_id.vpicode %>');
+                            filename1 += '<%= order.pharmacy_id.vpicode %>'+'_'+'<%= moment(order.created_at).format("DD-MM-YY") %>';
+                            <% for(var i=0;i<order.order_items.length;i++){ %>
+						        arr.push(['<%= order.pharmacy_id.vpicode %>','<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'])
 						    <% } %>
-					        <% } %>
 					
                         }
                     <% })%>

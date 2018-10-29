@@ -168,17 +168,21 @@ app.get('/distributor', isLoggedIn ,(req, res, next) =>{
 	});
 });
 
-app.get('/distributor_order', isLoggedIn, (req, res, next) => {
+app.get('/distributor_order',isLoggedIn, (req, res, next) => {
 	SalesOrder.find().populate('order_items').populate('pharmacy_id').exec().then(docu => {
-		res.render('distributor_orders', 
-		{
-			title:	'Orders',
-			doc: doc1,
-			docu: docu.reverse(),
-			distributor: req.session.dist
-		}
-	);
-	}).catch(err => {
+		VpiInventory.find().exec().then( medicine => {
+			console.log(docu[0]);
+			res.render('distributor_orders', 
+			{
+				title:	'Orders',
+				doc: doc1,
+				docu: docu.reverse(),
+				distributor: req.session.dist,
+				medicine: medicine
+			}
+		);
+		}).catch( 
+	)}).catch(err => {
 		console.log(err);
 	});
 });
