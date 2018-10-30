@@ -82,7 +82,7 @@
                             console.log('<%= order.pharmacy_id.vpicode %>');
                             filename1 += '<%= order.pharmacy_id.vpicode %>'+'_'+'<%= moment(order.created_at).format("DD-MM-YY") %>';
                             <% for(var i=0;i<order.order_items.length;i++){ %>
-						        arr.push(['<%= order.pharmacy_id.vpicode %>','<%= order.order_items[i]._id %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'])
+						        arr.push(['<%= order.pharmacy_id.vpicode %>','<%= order.order_items[i].code %>','<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'])
 						    <% } %>
 					
                         }
