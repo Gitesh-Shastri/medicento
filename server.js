@@ -300,7 +300,6 @@ app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, ne
 			console.log(mess[0]);
 		}).catch(); 
 		datah = fileRows;
-		message
 		pro = product;		
 		res.redirect('/distributor_product');
 		// remove temp file	
