@@ -247,29 +247,58 @@ app.post('/upload', isLoggedIn, upload.single('csvdata'), function (req, res, ne
 	// open uploaded file
 	csv.fromPath(req.file.path)
 	  .on("data", function (data) {
-		fileRows.push(data); // push each row
-			if(req.session.dist.email== 'contact@vpiindia.com') {
-				if(data[3] != 'balance_qty') {
-				var vpi = new VpiInventory();
-				vpi.Item_name= data[0];
-				vpi.batch_no = data[1];
-				vpi.expiry_date = data[2];
-				vpi.qty = data[3];
-				vpi.packing = data[4];
-				vpi.item_code=  data[5];
-				vpi.mrp = data[6];
-				vpi.manfc_code = data[7];
-				vpi.manfc_name = data[8];
-				vpi.save();	
+		fileRows.push(data); // push each row	
+		})
+	  .on("end", function () {
+		var item_name = 0;
+		var batch_no = 0; 
+		var expiry_date = 0;
+		var qty = 0;
+		var packing = 0;
+		var item_code = 0;
+		var mrp = 0;
+		var manfc_code = 0;
+		var manfc_name = 0;
+		for(var i=0;i<fileRows[0].length;i++) {
+			if(fileRows[0][i] == 'item_code') {
+				item_code = i;
+			} else if(fileRows[0][i] == 'Item name') {
+				item_name = i;
+			} else if(fileRows[0][i] == 'batch_no') {
+				batch_no = i;
+			} else if(fileRows[0][i] == 'expiry_date') {
+				expiry_date = i;
+			} else if(fileRows[0][i] == 'balance_qty') {
+				qty = i;
+			} else if(fileRows[0][i] == 'Packing') {
+				packing = i;
+			} else if(fileRows[0][i] == 'mrp') {
+				mrp = i;
+			} else if(fileRows[0][i] == 'mfac code') {
+				manfc_code = i;
+			} else if(fileRows[0][i] == 'Mfac name') {
+				manfc_name = i;
 			}
 		}
-				})
-	  .on("end", function () {
-		message.find().exec().then(mess => {
+		for(var i=1;i<fileRows.length;i++) {
+			var vpi = new VpiInventory();
+			vpi.Item_name= fileRows[i][item_name];
+			vpi.batch_no = fileRows[i][batch_no];
+			vpi.expiry_date = fileRows[i][expiry_date];
+			vpi.qty = fileRows[i][qty];
+			vpi.packing = fileRows[i][packing];
+			vpi.item_code=  fileRows[i][item_code];
+			vpi.mrp = fileRows[i][mrp];
+			vpi.manfc_code = fileRows[i][manfc_code];
+			vpi.manfc_name = fileRows[i][manfc_name];
+			vpi.save();	
+		}
+		console.log("IemCode " + item_code + "\nItemName " + item_name + "\nQty " + qty + "\nMrp " + mrp + "\nBatch " + batch_no + "\nExpiry " + expiry_date + "\nManfCode " + manfc_code + "\nManfName " + manfc_name);
+		 message.find().exec().then(mess => {
 			mess[0].count = mess[0].count+1;
 			mess[0].save();
 			console.log(mess[0]);
-		}).catch();
+		}).catch(); 
 		datah = fileRows;
 		message
 		pro = product;		
