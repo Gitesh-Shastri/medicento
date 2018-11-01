@@ -324,7 +324,7 @@ app.get('/distributor_product', isLoggedIn , upload.single('csvdata'),(req, res,
 		title: 'Inventoy Product',
 		data: data[0],
 		distributor: req.session.dist,
-		product1: data.slice(1, 1000) 
+		product1: data.slice(1, 100) 
 		});	
 	} 
 });
