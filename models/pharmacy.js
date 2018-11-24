@@ -4,18 +4,12 @@ const pharmaSchema = mongoose.Schema({
 	pharma_id: mongoose.Schema.Types.ObjectId,
 	area: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Area',
-		required: true
+		ref: 'Area'
 	},
 	pharma_name: {
-		type:String,
-		required: true
+		type:String
 	},
 	pharma_address: {
-		type: String,
-		required: true
-	},
-	vpicode: {
 		type: String
 	}
 });
