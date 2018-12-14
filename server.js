@@ -172,11 +172,77 @@ app.get("/distributor_logout", (req, res, next) => {
   });
 });
 
+app.get("/list", (req, res, next) => {
+    var list = [];
+  pharmacy.find().exec().then(function(pharm){
+    pharm.forEach((member) =>{
+      list.push({pharma_name: member.pharma_name,id: member._id.toString(),totalAmount:0});
+    });
+    SalesOrder.find().exec().then(function(order_items){
+      var total=0;
+      order_items.forEach((item)=>{
+        list.forEach((member) =>{
+          if(member.id === item.pharmacy_id.toString()){
+              member.totalAmount+=Number(item.grand_total)+0;
+              total+=Number(item.grand_total)+0;
+          };
+        });
+      });
+      list.sort(function(a, b) {
+        return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
+      });
+      list.reverse();
+      res.status(200).json(list);
+      console.log(total*(95/126));
+    });
+    // console.log(list);
+    // res.status(200).json(list);
+  });
+
+});
+
 app.get("/distributor", isLoggedIn, (req, res, next) => {
+  var today = new Date();
+  var month1=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month2=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month3=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month4=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month5=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month6=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month7=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month8=today.getMonth()+1;
+  today.setMonth(today.getMonth() - 1);
+  var month9=today.getMonth()+1;
+  // console.log(month1,month2,month3,month4,month5);
+  var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+  function monthNumToName(monthnum) {
+    return months[monthnum - 1] || '';
+  }
+  var monthsName=[monthNumToName(month1),monthNumToName(month2),monthNumToName(month3),monthNumToName(month4),monthNumToName(month5),monthNumToName(month6),monthNumToName(month7),monthNumToName(month8),monthNumToName(month9)]
+  var monthsNumber=[month1,month2,month3,month4,month5,month6,month7,month8,month9];
+  var monthRevenue=[0,0,0,0,0,0,0,0,0,0,0,0,0];
   var maxOrderSize=0,totalOrders=0,total=0;
   var statusActive=0,statusCanceled=0,statusDelivered=0,statusActive=0,statusNotDelivered=0,statusShipped=0,statusPacked=0;
   SalesOrder.find().exec().then(function(order_items){
     order_items.forEach((order)=>{
+      switch (order.created_at.getMonth()+1) {
+        case month1:monthRevenue[0]+=(95/126)*Number(order.grand_total);break;
+        case month2:monthRevenue[1]+=(95/126)*Number(order.grand_total);break;
+        case month3:monthRevenue[2]+=(95/126)*Number(order.grand_total);break;
+        case month4:monthRevenue[3]+=(95/126)*Number(order.grand_total);break;
+        case month5:monthRevenue[4]+=(95/126)*Number(order.grand_total);break;
+        case month6:monthRevenue[5]+=(95/126)*Number(order.grand_total);break;
+        case month7:monthRevenue[6]+=(95/126)*Number(order.grand_total);break;
+        case month8:monthRevenue[7]+=(95/126)*Number(order.grand_total);break;
+        case month9:monthRevenue[8]+=(95/126)*Number(order.grand_total);break;
+      };
       if(order.status === "Active")statusActive++;
       else if(order.status === "Delivered")statusDelivered++;
       else if(order.status === "Canceled")statusCanceled++;
@@ -184,11 +250,13 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
       else if(order.status === "Packed")statusPacked++;
       else if(order.status === "Shipped")statusShipped++;
       totalOrders+=1;
-      total+=Number(order.grand_total);
-      if(Number(order.grand_total)>maxOrderSize){
-        maxOrderSize=Number(order.grand_total);
+      total+=(95/126)*Number(order.grand_total);
+      if((95/126)*Number(order.grand_total)>maxOrderSize){
+        maxOrderSize=((95/126)*Number(order.grand_total)).toFixed(2);
       };
     });
+    total=total.toFixed(2);
+    console.log(monthRevenue);
     statusActive += statusNotDelivered;
     date = Date.now();
     res.render("distributor_dashboard", {
@@ -204,7 +272,10 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
       statusNotDelivered: statusNotDelivered,
       statusShipped: statusShipped,
       statusPacked: statusPacked,
-      total: total
+      total: total,
+      monthlyRevenue: monthRevenue,
+      monthsName: monthsName,
+      monthsNumber: monthsNumber
     });
   });
   console.log(req.session.dist);

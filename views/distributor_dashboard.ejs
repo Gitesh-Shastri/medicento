@@ -35,58 +35,59 @@
                     data: [
                         {
                             type: "column",
-                            name: "Actual Sales",
+                            name: "Monthly Revenue",
                             showInLegend: true,
                             xValueFormatString: "MMMM YYYY",
                             yValueFormatString: "Rs#,##0",
                             dataPoints: [
-                                { x: new Date(2018, 0), y: 20000 },
-                                { x: new Date(2018, 1), y: 25000 },
-                                { x: new Date(2018, 2), y: 30000 },
-                                { x: new Date(2018, 3), y: 70000, indexLabel: "High Renewals" },
-                                { x: new Date(2018, 4), y: 40000 },
-                                { x: new Date(2018, 5), y: 60000 },
-                                { x: new Date(2018, 6), y: 55000 },
-                                { x: new Date(2018, 7), y: 33000 },
-                                { x: new Date(2018, 8), y: 45000 }
-                            ]
-                        },
-                        {
-                            type: "line",
-                            name: "Expected Sales",
-                            showInLegend: true,
-                            yValueFormatString: "Rs#,##0",
-                            dataPoints: [
-                                { x: new Date(2018, 0), y: 32000 },
-                                { x: new Date(2018, 1), y: 37000 },
-                                { x: new Date(2018, 2), y: 40000 },
-                                { x: new Date(2018, 3), y: 52000 },
-                                { x: new Date(2018, 4), y: 45000 },
-                                { x: new Date(2018, 5), y: 47000 },
-                                { x: new Date(2018, 6), y: 42000 },
-                                { x: new Date(2018, 7), y: 43000 },
-                                { x: new Date(2018, 8), y: 41000 }
-                            ]
-                        },
-                        {
-                            type: "area",
-                            name: "Profit",
-                            markerBorderColor: "white",
-                            markerBorderThickness: 2,
-                            showInLegend: true,
-                            yValueFormatString: "Rs#,##0",
-                            dataPoints: [
-                                { x: new Date(2018, 0), y: 4000 },
-                                { x: new Date(2018, 1), y: 7000 },
-                                { x: new Date(2018, 2), y: 12000 },
-                                { x: new Date(2018, 3), y: 40000 },
-                                { x: new Date(2018, 4), y: 20000 },
-                                { x: new Date(2018, 5), y: 35000 },
-                                { x: new Date(2018, 6), y: 33000 },
-                                { x: new Date(2018, 7), y: 20000 },
-                                { x: new Date(2018, 8), y: 25000 }
+                                { x: new Date(2018, <%=monthsNumber[8]%>-1), y: <%=monthlyRevenue[8]%> },
+                                { x: new Date(2018, <%=monthsNumber[7]%>-1), y: <%=monthlyRevenue[7]%> },
+                                { x: new Date(2018, <%=monthsNumber[6]%>-1), y: <%=monthlyRevenue[6]%> },
+                                { x: new Date(2018, <%=monthsNumber[5]%>-1), y: <%=monthlyRevenue[5]%>, indexLabel: "High Renewals" },
+                                { x: new Date(2018, <%=monthsNumber[4]%>-1), y: <%=monthlyRevenue[4]%> },
+                                { x: new Date(2018, <%=monthsNumber[2]%>-1), y: <%=monthlyRevenue[3]%> },
+                                { x: new Date(2018, <%=monthsNumber[3]%>-1), y: <%=monthlyRevenue[2]%> },
+                                { x: new Date(2018, <%=monthsNumber[1]%>-1), y: <%=monthlyRevenue[1]%> },
+                                { x: new Date(2018, <%=monthsNumber[0]%>-1), y: <%=monthlyRevenue[0]%> }
                             ]
                         }]
+                        // ,
+                        // {
+                        //     type: "line",
+                        //     name: "Expected Sales",
+                        //     showInLegend: true,
+                        //     yValueFormatString: "Rs#,##0",
+                        //     dataPoints: [
+                        //         { x: new Date(2018, 0), y: 32000 },
+                        //         { x: new Date(2018, 1), y: 37000 },
+                        //         { x: new Date(2018, 2), y: 40000 },
+                        //         { x: new Date(2018, 3), y: 52000 },
+                        //         { x: new Date(2018, 4), y: 45000 },
+                        //         { x: new Date(2018, 5), y: 47000 },
+                        //         { x: new Date(2018, 6), y: 42000 },
+                        //         { x: new Date(2018, 7), y: 43000 },
+                        //         { x: new Date(2018, 8), y: 41000 }
+                        //     ]
+                        // },
+                        // {
+                        //     type: "area",
+                        //     name: "Profit",
+                        //     markerBorderColor: "white",
+                        //     markerBorderThickness: 2,
+                        //     showInLegend: true,
+                        //     yValueFormatString: "Rs#,##0",
+                        //     dataPoints: [
+                        //         { x: new Date(2018, 0), y: 4000 },
+                        //         { x: new Date(2018, 1), y: 7000 },
+                        //         { x: new Date(2018, 2), y: 12000 },
+                        //         { x: new Date(2018, 3), y: 40000 },
+                        //         { x: new Date(2018, 4), y: 20000 },
+                        //         { x: new Date(2018, 5), y: 35000 },
+                        //         { x: new Date(2018, 6), y: 33000 },
+                        //         { x: new Date(2018, 7), y: 20000 },
+                        //         { x: new Date(2018, 8), y: 25000 }
+                        //     ]
+                        // }]
                 };
                 $("#chartContainer").CanvasJSChart(options);
                 function addSymbols(e) {
@@ -152,19 +153,19 @@
                                     <div class="panel-body">
                                         <span>Approved <%=statusActive%></span>
                                         <div class="progress" style="margin-bottom: -1px;">
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemax="100" aria-valuemin="0" style="width: 50%"></div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<%=statusActive%>" aria-valuemax="<%=totalOrders%>" aria-valuemin="0" style="width: <%=(statusActive*100/totalOrders)%>%"></div>
                                         </div>
                                         <span >Packed <%=statusPacked%></span>
                                         <div class="progress" style="margin-bottom: -1px">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="12.5" aria-valuemax="100" aria-valuemin="0" style="width: 12.5%"></div>
+                                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="<%=statusPacked%>" aria-valuemax="<%=totalOrders%>" aria-valuemin="0" style="width: <%=(statusPacked*100/totalOrders)%>%"></div>
                                         </div>
                                         <span>Shipped <%=statusShipped%></span>
                                         <div class="progress" style="margin-bottom: -1px">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="37.5" aria-valuemax="100" aria-valuemin="0" style="width: 37.5%"></div>
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<%=statusShipped%>" aria-valuemax="<%=totalOrders%>" aria-valuemin="0" style="width: <%=(statusShipped*100/totalOrders)%>%"></div>
                                         </div>
                                         <span>Delivered <%=statusDelivered%></span>
                                         <div class="progress" style="margin-bottom: -1px">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="37.5" aria-valuemax="100" aria-valuemin="0" style="width: 37.5%"></div>
+                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="<%=statusDelivered%>" aria-valuemax="<%=totalOrders%>" aria-valuemin="0" style="width: <%=(statusDelivered*100/totalOrders)%>%"></div>
                                         </div>
                                     </div>
                                 </div>
