@@ -173,41 +173,13 @@ app.get("/distributor_logout", (req, res, next) => {
 });
 
 app.get("/distributor", isLoggedIn, (req, res, next) => {
-  var maxOrderSize=0,totalOrders=0,total=0;
-  var statusActive=0,statusCanceled=0,statusDelivered=0,statusActive=0,statusNotDelivered=0,statusShipped=0,statusPacked=0;
-  SalesOrder.find().exec().then(function(order_items){
-    order_items.forEach((order)=>{
-      if(order.status === "Active")statusActive++;
-      else if(order.status === "Delivered")statusDelivered++;
-      else if(order.status === "Canceled")statusCanceled++;
-      else if(order.status === "Not Delivered")statusNotDelivered++;
-      else if(order.status === "Packed")statusPacked++;
-      else if(order.status === "Shipped")statusShipped++;
-      totalOrders+=1;
-      total+=Number(order.grand_total);
-      if(Number(order.grand_total)>maxOrderSize){
-        maxOrderSize=Number(order.grand_total);
-      };
-    });
-    statusActive += statusNotDelivered;
-    date = Date.now();
-    res.render("distributor_dashboard", {
-      date: date,
-      title: "Dashboard",
-      distributor: req.session.dist,
-      maxOrderSize: maxOrderSize,
-      totalOrders: totalOrders-statusCanceled,
-      statusActive: statusActive,
-      statusCanceled: statusCanceled,
-      statusDelivered: statusDelivered,
-      statusActive: statusActive,
-      statusNotDelivered: statusNotDelivered,
-      statusShipped: statusShipped,
-      statusPacked: statusPacked,
-      total: total
-    });
-  });
+  date = Date.now();
   console.log(req.session.dist);
+  res.render("distributor_dashboard", {
+    date: date,
+    title: "Dashboard",
+    distributor: req.session.dist
+  });
 });
 
 app.get("/distributor_order", isLoggedIn, (req, res, next) => {
