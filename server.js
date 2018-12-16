@@ -230,54 +230,73 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
   var monthRevenue=[0,0,0,0,0,0,0,0,0,0,0,0,0];
   var maxOrderSize=0,totalOrders=0,total=0;
   var statusActive=0,statusCanceled=0,statusDelivered=0,statusActive=0,statusNotDelivered=0,statusShipped=0,statusPacked=0;
-  SalesOrder.find().exec().then(function(order_items){
-    order_items.forEach((order)=>{
-      switch (order.created_at.getMonth()+1) {
-        case month1:monthRevenue[0]+=(95/126)*Number(order.grand_total);break;
-        case month2:monthRevenue[1]+=(95/126)*Number(order.grand_total);break;
-        case month3:monthRevenue[2]+=(95/126)*Number(order.grand_total);break;
-        case month4:monthRevenue[3]+=(95/126)*Number(order.grand_total);break;
-        case month5:monthRevenue[4]+=(95/126)*Number(order.grand_total);break;
-        case month6:monthRevenue[5]+=(95/126)*Number(order.grand_total);break;
-        case month7:monthRevenue[6]+=(95/126)*Number(order.grand_total);break;
-        case month8:monthRevenue[7]+=(95/126)*Number(order.grand_total);break;
-        case month9:monthRevenue[8]+=(95/126)*Number(order.grand_total);break;
-      };
-      if(order.status === "Active")statusActive++;
-      else if(order.status === "Delivered")statusDelivered++;
-      else if(order.status === "Canceled")statusCanceled++;
-      else if(order.status === "Not Delivered")statusNotDelivered++;
-      else if(order.status === "Packed")statusPacked++;
-      else if(order.status === "Shipped")statusShipped++;
-      totalOrders+=1;
-      total+=(95/126)*Number(order.grand_total);
-      if((95/126)*Number(order.grand_total)>maxOrderSize){
-        maxOrderSize=((95/126)*Number(order.grand_total)).toFixed(2);
-      };
-    });
-    total=total.toFixed(2);
-    console.log(monthRevenue);
-    statusActive += statusNotDelivered;
-    date = Date.now();
-    res.render("distributor_dashboard", {
-      date: date,
-      title: "Dashboard",
-      distributor: req.session.dist,
-      maxOrderSize: maxOrderSize,
-      totalOrders: totalOrders-statusCanceled,
-      statusActive: statusActive,
-      statusCanceled: statusCanceled,
-      statusDelivered: statusDelivered,
-      statusActive: statusActive,
-      statusNotDelivered: statusNotDelivered,
-      statusShipped: statusShipped,
-      statusPacked: statusPacked,
-      total: total,
-      monthlyRevenue: monthRevenue,
-      monthsName: monthsName,
-      monthsNumber: monthsNumber
+  var list = [];
+pharmacy.find().exec().then(function(pharm){
+  pharm.forEach((member) =>{
+    list.push({pharma_name: member.pharma_name,id: member._id.toString(),totalAmount:0});
+  });
+    var totalPharmacy=list.length;
+    SalesOrder.find().exec().then(function(order_items){
+      order_items.forEach((order)=>{
+        list.forEach((member) =>{
+          if(member.id === order.pharmacy_id.toString()){
+              member.totalAmount+=Number((95/126)*order.grand_total)+0;
+          };
+        });
+        switch (order.created_at.getMonth()+1) {
+          case month1:monthRevenue[0]+=(95/126)*Number(order.grand_total);break;
+          case month2:monthRevenue[1]+=(95/126)*Number(order.grand_total);break;
+          case month3:monthRevenue[2]+=(95/126)*Number(order.grand_total);break;
+          case month4:monthRevenue[3]+=(95/126)*Number(order.grand_total);break;
+          case month5:monthRevenue[4]+=(95/126)*Number(order.grand_total);break;
+          case month6:monthRevenue[5]+=(95/126)*Number(order.grand_total);break;
+          case month7:monthRevenue[6]+=(95/126)*Number(order.grand_total);break;
+          case month8:monthRevenue[7]+=(95/126)*Number(order.grand_total);break;
+          case month9:monthRevenue[8]+=(95/126)*Number(order.grand_total);break;
+        };
+        if(order.status === "Active")statusActive++;
+        else if(order.status === "Delivered")statusDelivered++;
+        else if(order.status === "Canceled")statusCanceled++;
+        else if(order.status === "Not Delivered")statusNotDelivered++;
+        else if(order.status === "Packed")statusPacked++;
+        else if(order.status === "Shipped")statusShipped++;
+        totalOrders+=1;
+        total+=(95/126)*Number(order.grand_total);
+        if((95/126)*Number(order.grand_total)>maxOrderSize){
+          maxOrderSize=((95/126)*Number(order.grand_total)).toFixed(2);
+        };
+      });
+      list.sort(function(a, b) {
+        return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
+      });
+      list.reverse();
+      total=total.toFixed(2);
+      console.log(monthRevenue);
+      statusActive += statusNotDelivered;
+      date = Date.now();
+      res.render("distributor_dashboard", {
+        date: date,
+        title: "Dashboard",
+        distributor: req.session.dist,
+        maxOrderSize: maxOrderSize,
+        totalOrders: totalOrders-statusCanceled,
+        statusActive: statusActive,
+        statusCanceled: statusCanceled,
+        statusDelivered: statusDelivered,
+        statusActive: statusActive,
+        statusNotDelivered: statusNotDelivered,
+        statusShipped: statusShipped,
+        statusPacked: statusPacked,
+        total: total,
+        monthlyRevenue: monthRevenue,
+        monthsName: monthsName,
+        monthsNumber: monthsNumber,
+        list:list,
+        totalPharmacy:totalPharmacy
+      });
     });
   });
+
   console.log(req.session.dist);
 });
 
