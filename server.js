@@ -60,19 +60,19 @@ app.get("/pharmacy_login", (req, res, next) => {
 app.post("/login", (req, res, next) => {
   User.findOne({ useremail: req.body.email, usercode: req.body.pharmaId })
     .exec()
-    .then(doc => {
+    .then((doc) => {
       console.log(doc);
       PERSON.findOne({ user: doc._id })
         .exec()
-        .then(doc2 => {
+        .then((doc2) => {
           doc1 = doc2;
           res.redirect("/pharmacy");
         })
-        .catch(err => {
+        .catch((err) => {
           res.redirect("/pharmacy_login");
         });
     })
-    .catch(err => {
+    .catch((err) => {
       res.redirect("/pharmacy_login");
     });
 });
@@ -102,7 +102,7 @@ app.get("/pharmacy_orders", (req, res, next) => {
   SalesOrder.find({ sales_person_id: doc1._id })
     .populate("order_items")
     .exec()
-    .then(docu => {
+    .then((docu) => {
       console.log(docu);
       res.render("pharmacy_orders", {
         title: title,
@@ -110,7 +110,7 @@ app.get("/pharmacy_orders", (req, res, next) => {
         docu: docu
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -124,7 +124,7 @@ app.get("/pharmacy_product", (req, res, next) => {
     .populate("product_id", "medicento_name company_name total_stock")
     .populate("inventory_product_id", "stock_left")
     .exec()
-    .then(prod => {
+    .then((prod) => {
       console.log(prod);
       res.render("pharmacy_products", {
         title: title,
@@ -132,7 +132,7 @@ app.get("/pharmacy_product", (req, res, next) => {
         prod: prod
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -147,19 +147,50 @@ app.get("/distributor_login", (req, res, next) => {
 });
 
 app.post("/dlogin", (req, res, next) => {
-  Dist.findOne({ email: req.body.email, password: req.body.password })
-    .exec()
-    .then(doc => {
-      if (doc == null) {
+  if (req.body.email == "medicento@test.com" && req.body.password == "test") {
+    res.redirect("/distributor_static");
+  } else {
+    Dist.findOne({ email: req.body.email, password: req.body.password })
+      .exec()
+      .then((doc) => {
+        if (doc == null) {
+          res.redirect("/distributor_login");
+        }
+        req.session.dist = doc;
+        res.redirect("/distributor");
+      })
+      .catch((err) => {
+        console.log(err);
         res.redirect("/distributor_login");
-      }
-      req.session.dist = doc;
-      res.redirect("/distributor");
+      });
+  }
+});
+
+app.get("/distributor_static", (req, res, next) => {
+  res.render("distributor_static", {
+    date: Date.now,
+    title: "Dashboard",
+  });
+});
+
+app.get("/distributor_order_static", (req, res, next) => {
+  SalesOrder.find()
+    .populate("order_items")
+    .populate("pharmacy_id")
+    .populate("sales_person_id")
+    .exec()
+    .then((docu) => {
+      console.log(docu[0]);
+      res.render("distributor_order_static", {
+        title: "Orders",
+        doc: doc1,
+        docu: docu.reverse(),
+        distributor: req.session.dist
+      });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
-      res.redirect("/distributor_login");
-    });
+  });
 });
 
 app.get("/distributor_logout", (req, res, next) => {
@@ -188,7 +219,7 @@ app.get("/distributor_order", isLoggedIn, (req, res, next) => {
     .populate("pharmacy_id")
     .populate("sales_person_id")
     .exec()
-    .then(docu => {
+    .then((docu) => {
       console.log(docu[0]);
       res.render("distributor_orders", {
         title: "Orders",
@@ -197,7 +228,7 @@ app.get("/distributor_order", isLoggedIn, (req, res, next) => {
         distributor: req.session.dist
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -206,7 +237,7 @@ app.post("/csvFile", (req, res, next) => {
     .populate("order_items")
     .populate("pharmacy_id")
     .exec()
-    .then(order => {
+    .then((order) => {
       console.log(order);
       var arr = [];
       arr.push([
@@ -277,7 +308,7 @@ app.post("/csvFile", (req, res, next) => {
         ]
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
   res.redirect("/distributor_order");
@@ -318,7 +349,7 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function(
       message
         .find()
         .exec()
-        .then(mess => {
+        .then((mess) => {
           mess[0].count = mess[0].count + 1;
           mess[0].save();
           console.log(mess[0]);
