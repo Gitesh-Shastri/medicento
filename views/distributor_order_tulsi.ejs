@@ -147,7 +147,7 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
                 <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
             </button>
-            <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i> Medicento_Distributor_Test</a>
+            <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i> TULSI PHARMA</a>
         </div>
         <!-- navbar-header-->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -168,7 +168,7 @@
                     <% } else {%>
                 <li>
                     <% } %>
-                    <a href="/distributor_static"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span>
+                    <a href="/distributor_tulsi"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span>
                         Dashboard</a>
                 </li>
                 <% if(title == 'Orders') {  %>
@@ -176,7 +176,7 @@
                     <% } else {%>
                 <li>
                     <% } %>
-                    <a href="/distributor_order_static"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
+                    <a href="/distributor_order_tulsi"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
                 </li>
                 <% if(title == 'Retailers') {  %>
                 <li class="active">
@@ -190,7 +190,7 @@
                     <% } else {%>
                 <li>
                     <% } %>
-                    <a href="/distributor_product_static"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
+                    <a href="/distributor_product_tulsi"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
                 </li>
                 <% if(title == 'Billing') {  %>
                 <li class="active">
@@ -230,37 +230,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <% docu.forEach((orders) => { %>
-                            <tr>
-                                <td><strong>
-                                        <%= orders._id %></strong></td>
-                                <td><strong>
-                                        <%= moment(orders.created_at).format('YYYY/DD/MM , h:mm:ss a') %></strong></td>
-                                <td><strong>
-                                        <%= orders.pharmacy_id.pharma_name %></strong></td>
-                                <td>
-                                    <% orders.order_items.forEach((order) => { %>
-                                    <strong>
-                                        <%= order.medicento_name %> *
-                                        <%= order.quantity %></strong><br />
-                                    <%}) %>
-                                </td>
-                                <td><strong>
-                                        <%= orders.grand_total %></strong></td>
-                                <td><strong>
-                                        <%= orders.status %></strong></td>
-                                <td>
-                                    <Button type="
-                        button" class="btn btn-primary" onclick="dataCsv1('<%= orders._id %>')">DownloadCsv</Button></td>
-                                </td>
-                                <td>
-                                    <form action="/csvFile" method="POST">
-                                        <input type="text" name="id" value="<%= orders._id %>" hidden>
-                                        <Button type="submit" class="btn btn-primary">Mail</Button>
-                                </td>
-                                </form>
-                            </tr>
-                            <% }) %>
                         </tbody>
                     </table>
                 </div>
@@ -278,37 +247,7 @@
             $('#porder').footable();
         });
 
-        function dataCsv1(data) {
-            var arr = [];
-            var filename1 = 'SalesOrder_Medicento_';
-            <% docu.forEach((order) => { %>
-            var id = '<%= order._id %>'
-            if (id == data) {
-                console.log('<%= order.pharmacy_id.vpicode %>');
-                filename1 += '<%= order.pharmacy_id.vpicode %>' + '_' +
-                    '<%= moment(order.created_at).format("DD-MM-YY") %>';
-                <% for(var i=0;i<order.order_items.length;i++){ %>
-                arr.push(['<%= order.pharmacy_id.vpicode %>', '<%= order.order_items[i].code %>',
-                    '<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'
-                ])
-                <% } %>
-
-            }
-            <% })%>
-            var csv = 'Party Code, Item Code, Item Name, Qty\n';
-            arr.forEach(function (row) {
-                csv += row.join(',');
-                csv += "\n";
-            })
-            console.log(csv);
-            var hiddenElement = document.createElement('a');
-            var csv1 = 'data:text/csv;charset=utf-8,' + csv;
-            csv = encodeURI(csv1);
-            hiddenElement.setAttribute('href', csv);
-            hiddenElement.setAttribute('download', filename1 + '.csv');
-            document.getElementById('container1').appendChild(hiddenElement);
-            hiddenElement.click();
-        }
+        function dataCsv1(data) {}
     </script>
 </body>
 

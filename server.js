@@ -146,9 +146,33 @@ app.get("/distributor_login", (req, res, next) => {
   res.render("distributor_login");
 });
 
+app.get("/distributor_product_tulsi", (req, res, next) => {
+  if (datah == "Helow") {
+    console.log("Not");
+    res.render("distributor_product_tulsi", {
+      title: "Inventoy Product",
+      data: datah,
+      product1: []
+    });
+  } else {
+    var data = datah;
+    datah = "Helow";
+    res.render("distributor_product_tulsi", {
+      title: "Inventoy Product",
+      data: data[0],
+      product1: data.slice(1, 100)
+    });
+  }
+});
+
 app.post("/dlogin", (req, res, next) => {
   if (req.body.email == "medicento@test.com" && req.body.password == "test") {
     res.redirect("/distributor_static");
+  } else if (
+    req.body.email == "tulsipharma@yahoo.co.in" &&
+    req.body.password == "tulsimed"
+  ) {
+    res.redirect("/distributor_tulsi");
   } else {
     Dist.findOne({ email: req.body.email, password: req.body.password })
       .exec()
@@ -156,6 +180,7 @@ app.post("/dlogin", (req, res, next) => {
         if (doc == null) {
           res.redirect("/distributor_login");
         }
+        console.log(doc);
         req.session.dist = doc;
         res.redirect("/distributor");
       })
@@ -169,8 +194,43 @@ app.post("/dlogin", (req, res, next) => {
 app.get("/distributor_static", (req, res, next) => {
   res.render("distributor_static", {
     date: new Date(),
-    title: "Dashboard",
+    title: "Dashboard"
   });
+});
+
+app.get("/distributor_tulsi", (req, res, next) => {
+  res.render("distributor_tulsi", {
+    date: new Date(),
+    title: "Dashboard"
+  });
+});
+
+app.get("/distributor_order_tulsi", (req, res, next) => {
+  res.render("distributor_order_tulsi", {
+    title: "Orders"
+  });
+});
+
+app.post("/upload_tulsi", isLoggedIn, upload.single("csvdata"), function(
+  req,
+  res,
+  next
+) {
+  const fileRows = [];
+  const product = [];
+  const comp = [];
+  var count1 = 0;
+  csv
+    .fromPath(req.file.path)
+    .on("data", function(data) {
+      fileRows.push(data); // push each row
+    })
+    .on("end", function() {
+      datah = fileRows;
+      res.redirect("/distributor_product_tulsi");
+      // remove temp file
+      //process "fileRows" and respond
+    });
 });
 
 app.get("/distributor_order_static", (req, res, next) => {
@@ -190,7 +250,7 @@ app.get("/distributor_order_static", (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-  });
+    });
 });
 
 app.get("/distributor_logout", (req, res, next) => {
@@ -204,129 +264,208 @@ app.get("/distributor_logout", (req, res, next) => {
 });
 
 app.get("/list", (req, res, next) => {
-    var list = [];
-  pharmacy.find().exec().then(function(pharm){
-    pharm.forEach((member) =>{
-      list.push({pharma_name: member.pharma_name,id: member._id.toString(),totalAmount:0});
-    });
-    SalesOrder.find().exec().then(function(order_items){
-      var total=0;
-      order_items.forEach((item)=>{
-        list.forEach((member) =>{
-          if(member.id === item.pharmacy_id.toString()){
-              member.totalAmount+=Number(item.grand_total)+0;
-              total+=Number(item.grand_total)+0;
-          };
+  var list = [];
+  pharmacy
+    .find()
+    .exec()
+    .then(function(pharm) {
+      pharm.forEach((member) => {
+        list.push({
+          pharma_name: member.pharma_name,
+          id: member._id.toString(),
+          totalAmount: 0
         });
       });
-      list.sort(function(a, b) {
-        return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
-      });
-      list.reverse();
-      res.status(200).json(list);
-      console.log(total*(95/126));
+      SalesOrder.find()
+        .exec()
+        .then(function(order_items) {
+          var total = 0;
+          order_items.forEach((item) => {
+            list.forEach((member) => {
+              if (member.id === item.pharmacy_id.toString()) {
+                member.totalAmount += Number(item.grand_total) + 0;
+                total += Number(item.grand_total) + 0;
+              }
+            });
+          });
+          list.sort(function(a, b) {
+            return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
+          });
+          list.reverse();
+          res.status(200).json(list);
+          console.log(total * (95 / 126));
+        });
+      // console.log(list);
+      // res.status(200).json(list);
     });
-    // console.log(list);
-    // res.status(200).json(list);
-  });
-
 });
 
 app.get("/distributor", isLoggedIn, (req, res, next) => {
   var today = new Date();
-  var month1=today.getMonth()+1;
+  var month1 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month2=today.getMonth()+1;
+  var month2 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month3=today.getMonth()+1;
+  var month3 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month4=today.getMonth()+1;
+  var month4 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month5=today.getMonth()+1;
+  var month5 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month6=today.getMonth()+1;
+  var month6 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month7=today.getMonth()+1;
+  var month7 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month8=today.getMonth()+1;
+  var month8 = today.getMonth() + 1;
   today.setMonth(today.getMonth() - 1);
-  var month9=today.getMonth()+1;
+  var month9 = today.getMonth() + 1;
   // console.log(month1,month2,month3,month4,month5);
-  var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+  var months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
   function monthNumToName(monthnum) {
-    return months[monthnum - 1] || '';
+    return months[monthnum - 1] || "";
   }
-  var monthsName=[monthNumToName(month1),monthNumToName(month2),monthNumToName(month3),monthNumToName(month4),monthNumToName(month5),monthNumToName(month6),monthNumToName(month7),monthNumToName(month8),monthNumToName(month9)]
-  var monthsNumber=[month1,month2,month3,month4,month5,month6,month7,month8,month9];
-  var monthRevenue=[0,0,0,0,0,0,0,0,0,0,0,0,0];
-  var maxOrderSize=0,totalOrders=0,total=0;
-  var statusActive=0,statusCanceled=0,statusDelivered=0,statusActive=0,statusNotDelivered=0,statusShipped=0,statusPacked=0;
+  var monthsName = [
+    monthNumToName(month1),
+    monthNumToName(month2),
+    monthNumToName(month3),
+    monthNumToName(month4),
+    monthNumToName(month5),
+    monthNumToName(month6),
+    monthNumToName(month7),
+    monthNumToName(month8),
+    monthNumToName(month9)
+  ];
+  var monthsNumber = [
+    month1,
+    month2,
+    month3,
+    month4,
+    month5,
+    month6,
+    month7,
+    month8,
+    month9
+  ];
+  var monthRevenue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var maxOrderSize = 0,
+    totalOrders = 0,
+    total = 0;
+  var statusActive = 0,
+    statusCanceled = 0,
+    statusDelivered = 0,
+    statusActive = 0,
+    statusNotDelivered = 0,
+    statusShipped = 0,
+    statusPacked = 0;
   var list = [];
-pharmacy.find().exec().then(function(pharm){
-  pharm.forEach((member) =>{
-    list.push({pharma_name: member.pharma_name,id: member._id.toString(),totalAmount:0});
-  });
-    var totalPharmacy=list.length;
-    SalesOrder.find().exec().then(function(order_items){
-      order_items.forEach((order)=>{
-        list.forEach((member) =>{
-          if(member.id === order.pharmacy_id.toString()){
-              member.totalAmount+=Number((95/126)*order.grand_total)+0;
-          };
+  pharmacy
+    .find()
+    .exec()
+    .then(function(pharm) {
+      pharm.forEach((member) => {
+        list.push({
+          pharma_name: member.pharma_name,
+          id: member._id.toString(),
+          totalAmount: 0
         });
-        switch (order.created_at.getMonth()+1) {
-          case month1:monthRevenue[0]+=(95/126)*Number(order.grand_total);break;
-          case month2:monthRevenue[1]+=(95/126)*Number(order.grand_total);break;
-          case month3:monthRevenue[2]+=(95/126)*Number(order.grand_total);break;
-          case month4:monthRevenue[3]+=(95/126)*Number(order.grand_total);break;
-          case month5:monthRevenue[4]+=(95/126)*Number(order.grand_total);break;
-          case month6:monthRevenue[5]+=(95/126)*Number(order.grand_total);break;
-          case month7:monthRevenue[6]+=(95/126)*Number(order.grand_total);break;
-          case month8:monthRevenue[7]+=(95/126)*Number(order.grand_total);break;
-          case month9:monthRevenue[8]+=(95/126)*Number(order.grand_total);break;
-        };
-        if(order.status === "Active")statusActive++;
-        else if(order.status === "Delivered")statusDelivered++;
-        else if(order.status === "Canceled")statusCanceled++;
-        else if(order.status === "Not Delivered")statusNotDelivered++;
-        else if(order.status === "Packed")statusPacked++;
-        else if(order.status === "Shipped")statusShipped++;
-        totalOrders+=1;
-        total+=(95/126)*Number(order.grand_total);
-        if((95/126)*Number(order.grand_total)>maxOrderSize){
-          maxOrderSize=((95/126)*Number(order.grand_total)).toFixed(2);
-        };
       });
-      list.sort(function(a, b) {
-        return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
-      });
-      list.reverse();
-      total=total.toFixed(2);
-      console.log(monthRevenue);
-      statusActive += statusNotDelivered;
-      date = Date.now();
-      res.render("distributor_dashboard", {
-        date: date,
-        title: "Dashboard",
-        distributor: req.session.dist,
-        maxOrderSize: maxOrderSize,
-        totalOrders: totalOrders-statusCanceled,
-        statusActive: statusActive,
-        statusCanceled: statusCanceled,
-        statusDelivered: statusDelivered,
-        statusActive: statusActive,
-        statusNotDelivered: statusNotDelivered,
-        statusShipped: statusShipped,
-        statusPacked: statusPacked,
-        total: total,
-        monthlyRevenue: monthRevenue,
-        monthsName: monthsName,
-        monthsNumber: monthsNumber,
-        list:list,
-        totalPharmacy:totalPharmacy
-      });
+      var totalPharmacy = list.length;
+      SalesOrder.find()
+        .exec()
+        .then(function(order_items) {
+          order_items.forEach((order) => {
+            list.forEach((member) => {
+              if (member.id === order.pharmacy_id.toString()) {
+                member.totalAmount +=
+                  Number((95 / 126) * order.grand_total) + 0;
+              }
+            });
+            switch (order.created_at.getMonth() + 1) {
+              case month1:
+                monthRevenue[0] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month2:
+                monthRevenue[1] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month3:
+                monthRevenue[2] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month4:
+                monthRevenue[3] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month5:
+                monthRevenue[4] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month6:
+                monthRevenue[5] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month7:
+                monthRevenue[6] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month8:
+                monthRevenue[7] += (95 / 126) * Number(order.grand_total);
+                break;
+              case month9:
+                monthRevenue[8] += (95 / 126) * Number(order.grand_total);
+                break;
+            }
+            if (order.status === "Active") statusActive++;
+            else if (order.status === "Delivered") statusDelivered++;
+            else if (order.status === "Canceled") statusCanceled++;
+            else if (order.status === "Not Delivered") statusNotDelivered++;
+            else if (order.status === "Packed") statusPacked++;
+            else if (order.status === "Shipped") statusShipped++;
+            totalOrders += 1;
+            total += (95 / 126) * Number(order.grand_total);
+            if ((95 / 126) * Number(order.grand_total) > maxOrderSize) {
+              maxOrderSize = ((95 / 126) * Number(order.grand_total)).toFixed(
+                2
+              );
+            }
+          });
+          list.sort(function(a, b) {
+            return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
+          });
+          list.reverse();
+          total = total.toFixed(2);
+          console.log(monthRevenue);
+          statusActive += statusNotDelivered;
+          date = Date.now();
+          res.render("distributor_dashboard", {
+            date: date,
+            title: "Dashboard",
+            distributor: req.session.dist,
+            maxOrderSize: maxOrderSize,
+            totalOrders: totalOrders - statusCanceled,
+            statusActive: statusActive,
+            statusCanceled: statusCanceled,
+            statusDelivered: statusDelivered,
+            statusActive: statusActive,
+            statusNotDelivered: statusNotDelivered,
+            statusShipped: statusShipped,
+            statusPacked: statusPacked,
+            total: total,
+            monthlyRevenue: monthRevenue,
+            monthsName: monthsName,
+            monthsNumber: monthsNumber,
+            list: list,
+            totalPharmacy: totalPharmacy
+          });
+        });
     });
-  });
 
   console.log(req.session.dist);
 });
@@ -350,6 +489,7 @@ app.get("/distributor_order", isLoggedIn, (req, res, next) => {
       console.log(err);
     });
 });
+
 app.post("/csvFile", (req, res, next) => {
   SalesOrder.findById(req.body.id)
     .populate("order_items")

@@ -147,7 +147,7 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
                 <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
             </button>
-            <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i> Medicento_Distributor_Test</a>
+            <a class="navbar-brand" href="/distributor"><i class="fa fa-user"></i> TULSI PHARMA</a>
         </div>
         <!-- navbar-header-->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -168,7 +168,7 @@
                     <% } else {%>
                 <li>
                     <% } %>
-                    <a href="/distributor_static"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span>
+                    <a href="/distributor_tulsi"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span>
                         Dashboard</a>
                 </li>
                 <% if(title == 'Orders') {  %>
@@ -176,7 +176,7 @@
                     <% } else {%>
                 <li>
                     <% } %>
-                    <a href="/distributor_order_static"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
+                    <a href="/distributor_order_tulsi"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
                 </li>
                 <% if(title == 'Retailers') {  %>
                 <li class="active">
@@ -190,7 +190,7 @@
                     <% } else {%>
                 <li>
                     <% } %>
-                    <a href="/distributor_product_static"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
+                    <a href="/distributor_product_tulsi"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
                 </li>
                 <% if(title == 'Billing') {  %>
                 <li class="active">
@@ -208,107 +208,100 @@
                 </li>
             </ul>
         </div>
-        <!-- /#sidebar-wrapper -->
-        <div class="content" style="margin: 10px;">
-            <div class="panel panel-default panel-table" style="padding: 2%">
-                <div class="panel-heading" style="text-align: center">
-                    Active Orders
+        <div id="content" style="margin-top: 30px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <span style="margin-left:30%;">Total Items</span>
+                            </div>
+                            <div class="panel-body">
+                                <span class="text-danger ">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <span style="padding:10px;color: aliceblue;">Items LOW &darr; on stock</span>
+                            </div>
+                            <div class="panel-body">
+                                <span class="text-danger ">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <span style="padding:10px;color: aliceblue;">Items EXC &uarr; on stock</span>
+                            </div>
+                            <div class="panel-body">
+                                <span class="text-danger ">0</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body table-responsive toogle-circle-filled">
-                    <table id="porder" class="table table-stripped" style="overflow-x:auto;"">
+                <section id="upload-data-panel">
+                    <form id="upload-form" action="/upload_tulsi" method="post" enctype="multipart/form-data">
+                        <fieldset>
+                            <legend>Upload Data1</legend>
+                            <div>
+                                <!-- The name here is important, and will be used later to reference the data -->
+                                <input type="file" name="csvdata" accept=".csv" id="file">
+                            </div><br>
+                            <div>
+                                <input id="submit" class="btn btn-primary" type="submit" value="Upload">
+                            </div>
+                        </fieldset>
+                    </form>
+                </section>
+            </div>
+            <% if(data == 'Helow') { %>
+            <% } else { %>
+            <div class="row" style="margin: 10px;">
+                <div class="col-md-11">
+                    <table id="porder" class="table table-striped " style="width:100%">
                         <thead>
                             <tr>
-                                <th data-toggle="
-                        true">Order_Id</th>
-                        <th data-hide="tablet, phone">Purchased_on</th>
-                        <th>Retailer</th>
-                        <th>Products</th>
-                        <th>Amount</th>
-                        <th data-hide="tablet, phone">Status</th>
-                        <th data-hide="tablet, phone">DownloadCsv</th>
-                        <th data-hide="tablet, phone">Mail</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <% docu.forEach((orders) => { %>
-                            <tr>
-                                <td><strong>
-                                        <%= orders._id %></strong></td>
-                                <td><strong>
-                                        <%= moment(orders.created_at).format('YYYY/DD/MM , h:mm:ss a') %></strong></td>
-                                <td><strong>
-                                        <%= orders.pharmacy_id.pharma_name %></strong></td>
-                                <td>
-                                    <% orders.order_items.forEach((order) => { %>
-                                    <strong>
-                                        <%= order.medicento_name %> *
-                                        <%= order.quantity %></strong><br />
-                                    <%}) %>
-                                </td>
-                                <td><strong>
-                                        <%= orders.grand_total %></strong></td>
-                                <td><strong>
-                                        <%= orders.status %></strong></td>
-                                <td>
-                                    <Button type="
-                        button" class="btn btn-primary" onclick="dataCsv1('<%= orders._id %>')">DownloadCsv</Button></td>
-                                </td>
-                                <td>
-                                    <form action="/csvFile" method="POST">
-                                        <input type="text" name="id" value="<%= orders._id %>" hidden>
-                                        <Button type="submit" class="btn btn-primary">Mail</Button>
-                                </td>
-                                </form>
+                                <% data.forEach(function(pro) { %>
+                                <% if(pro != '') { %>
+                                <th>
+                                    <%= pro %>
+                                </th>
+                                <% } %>
+                                <% })%>
                             </tr>
-                            <% }) %>
-                        </tbody>
+                            <thead>
+                            <tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
-            <div id="container1" style="display:none;"></div>
+            <% }%>
         </div>
     </div>
+    </div>
+    <!-- /#wrapper -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/pharma.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-footable/3.1.6/footable.core.min.js"></script>
-    <script src="js/dataTables.js"></script>
-    <script></script>
+    <script src="js/canvas.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#porder').footable();
-        });
-
-        function dataCsv1(data) {
-            var arr = [];
-            var filename1 = 'SalesOrder_Medicento_';
-            <% docu.forEach((order) => { %>
-            var id = '<%= order._id %>'
-            if (id == data) {
-                console.log('<%= order.pharmacy_id.vpicode %>');
-                filename1 += '<%= order.pharmacy_id.vpicode %>' + '_' +
-                    '<%= moment(order.created_at).format("DD-MM-YY") %>';
-                <% for(var i=0;i<order.order_items.length;i++){ %>
-                arr.push(['<%= order.pharmacy_id.vpicode %>', '<%= order.order_items[i].code %>',
-                    '<%= order.order_items[i].medicento_name %>', '<%= order.order_items[i].quantity %>'
-                ])
-                <% } %>
-
-            }
-            <% })%>
-            var csv = 'Party Code, Item Code, Item Name, Qty\n';
-            arr.forEach(function (row) {
-                csv += row.join(',');
-                csv += "\n";
-            })
-            console.log(csv);
-            var hiddenElement = document.createElement('a');
-            var csv1 = 'data:text/csv;charset=utf-8,' + csv;
-            csv = encodeURI(csv1);
-            hiddenElement.setAttribute('href', csv);
-            hiddenElement.setAttribute('download', filename1 + '.csv');
-            document.getElementById('container1').appendChild(hiddenElement);
-            hiddenElement.click();
-        }
+        var rows = '';
+        <% product1.forEach(function(pro) { %>
+        var row = "<tr>";
+        <% pro.forEach(function(pro1) { %>
+        <% if(pro1 != '') { %>
+        row += '<td><%= pro1 %></td>';
+        <% } %>
+        <% }) %>
+        row += '</tr>';
+        rows += row;
+        <% }); %>
+        $('tbody').append(rows);
+        $('#porder').dataTable();
     </script>
 </body>
 
