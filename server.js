@@ -168,7 +168,7 @@ app.post("/dlogin", (req, res, next) => {
 
 app.get("/distributor_static", (req, res, next) => {
   res.render("distributor_static", {
-    date: Date.now,
+    date: new Date(),
     title: "Dashboard",
   });
 });
