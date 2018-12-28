@@ -20,7 +20,7 @@ const Inventoy = require("./models/InventoryProduct");
 const Dist = require("./models/Inventory");
 mongoose.connect(
   MONGODB_URI,
-  function() {
+  function () {
     console.log("connected to DB");
   }
 );
@@ -43,26 +43,64 @@ admin.initializeApp({
 });
 
 app.use(express.static(__dirname + "/public"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.locals.moment = moment;
 var session = require("express-session");
 app.use(
-  session({ secret: "ssshhhhh", resave: false, saveUninitialized: true })
+  session({
+    secret: "ssshhhhh",
+    resave: false,
+    saveUninitialized: true
+  })
 );
-var upload = multer({ dest: "uploads/" });
+var upload = multer({
+  dest: "uploads/"
+});
 
 app.get("/pharmacy_login", (req, res, next) => {
   res.render("login");
 });
 
+app.get("/code", (req, res, next) => {
+  pharmacy.findOne({
+      _id: req.query.email
+    })
+    .exec()
+    .then((doc) => {
+      PERSON.findOne({
+          Allocated_Pharma: doc._id
+        })
+        .populate('user')
+        .exec()
+        .then((doc2) => {
+          doc1 = doc2;
+          res.redirect("/pharmacy");
+        })
+        .catch((err) => {
+          res.redirect("/pharmacy_login");
+        });
+    })
+    .catch((err) => {
+      res.redirect("/pharmacy_login");
+    });
+});
+
 app.post("/login", (req, res, next) => {
-  User.findOne({ useremail: req.body.email, usercode: req.body.pharmaId })
+  User.findOne({
+      useremail: req.body.email,
+      usercode: req.body.pharmaId
+    })
     .exec()
     .then((doc) => {
       console.log(doc);
-      PERSON.findOne({ user: doc._id })
+      PERSON.findOne({
+          user: doc._id
+        })
+        .populate('user')
         .exec()
         .then((doc2) => {
           doc1 = doc2;
@@ -99,7 +137,9 @@ app.get("/pharmacy_orders", (req, res, next) => {
   if (doc1 == undefined) {
     res.redirect("/pharmacy_login");
   }
-  SalesOrder.find({ sales_person_id: doc1._id })
+  SalesOrder.find({
+      sales_person_id: doc1._id
+    })
     .populate("order_items")
     .exec()
     .then((docu) => {
@@ -174,7 +214,10 @@ app.post("/dlogin", (req, res, next) => {
   ) {
     res.redirect("/distributor_tulsi");
   } else {
-    Dist.findOne({ email: req.body.email, password: req.body.password })
+    Dist.findOne({
+        email: req.body.email,
+        password: req.body.password
+      })
       .exec()
       .then((doc) => {
         if (doc == null) {
@@ -211,21 +254,17 @@ app.get("/distributor_order_tulsi", (req, res, next) => {
   });
 });
 
-app.post("/upload_tulsi", isLoggedIn, upload.single("csvdata"), function(
-  req,
-  res,
-  next
-) {
+app.post("/upload_tulsi", upload.single("csvdata"), function (req, res, next) {
   const fileRows = [];
   const product = [];
   const comp = [];
   var count1 = 0;
   csv
     .fromPath(req.file.path)
-    .on("data", function(data) {
+    .on("data", function (data) {
       fileRows.push(data); // push each row
     })
-    .on("end", function() {
+    .on("end", function () {
       datah = fileRows;
       res.redirect("/distributor_product_tulsi");
       // remove temp file
@@ -254,7 +293,7 @@ app.get("/distributor_order_static", (req, res, next) => {
 });
 
 app.get("/distributor_logout", (req, res, next) => {
-  req.session.destroy(function(err) {
+  req.session.destroy(function (err) {
     if (err) {
       console.log(err);
     } else {
@@ -268,7 +307,7 @@ app.get("/list", (req, res, next) => {
   pharmacy
     .find()
     .exec()
-    .then(function(pharm) {
+    .then(function (pharm) {
       pharm.forEach((member) => {
         list.push({
           pharma_name: member.pharma_name,
@@ -278,7 +317,7 @@ app.get("/list", (req, res, next) => {
       });
       SalesOrder.find()
         .exec()
-        .then(function(order_items) {
+        .then(function (order_items) {
           var total = 0;
           order_items.forEach((item) => {
             list.forEach((member) => {
@@ -288,7 +327,7 @@ app.get("/list", (req, res, next) => {
               }
             });
           });
-          list.sort(function(a, b) {
+          list.sort(function (a, b) {
             return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
           });
           list.reverse();
@@ -334,6 +373,7 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
     "November",
     "December"
   ];
+
   function monthNumToName(monthnum) {
     return months[monthnum - 1] || "";
   }
@@ -374,7 +414,7 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
   pharmacy
     .find()
     .exec()
-    .then(function(pharm) {
+    .then(function (pharm) {
       pharm.forEach((member) => {
         list.push({
           pharma_name: member.pharma_name,
@@ -385,7 +425,7 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
       var totalPharmacy = list.length;
       SalesOrder.find()
         .exec()
-        .then(function(order_items) {
+        .then(function (order_items) {
           order_items.forEach((order) => {
             list.forEach((member) => {
               if (member.id === order.pharmacy_id.toString()) {
@@ -436,7 +476,7 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
               );
             }
           });
-          list.sort(function(a, b) {
+          list.sort(function (a, b) {
             return parseFloat(a.totalAmount) - parseFloat(b.totalAmount);
           });
           list.reverse();
@@ -524,11 +564,7 @@ app.post("/csvFile", (req, res, next) => {
       ]);
       if (order.order_items.length > 1) {
         for (var i = 1; i < order.order_items.length; i++) {
-          arr.push([
-            ,
-            ,
-            ,
-            ,
+          arr.push([, , , ,
             order.order_items[i]._id,
             order.order_items[i].medicento_name,
             order.order_items[i].quantity,
@@ -539,31 +575,28 @@ app.post("/csvFile", (req, res, next) => {
         }
       }
       var ws = fs.createWriteStream("./uploads/order.csv");
-      csv.write(arr, { headers: true }).pipe(ws);
+      csv.write(arr, {
+        headers: true
+      }).pipe(ws);
       nodeoutlook.sendEmail({
         auth: {
-          user: "giteshshastri123@outlook.com",
-          pass: "shastri@1"
+          user: "Team.medicento@outlook.com",
+          pass: "med4lyf@51"
         },
-        from: "giteshshastri123@outlook.com",
-        to:
-          "giteshshastri96@gmail.com,Contact.medicento@gmail.com,sale.medicento@gmail.com",
-        subject:
-          "Sales Order - VPI - " +
+        from: "Team.medicento@outlook.com",
+        to: "giteshshastri96@gmail.com,Contact.medicento@gmail.com,sale.medicento@gmail.com",
+        subject: "Sales Order - VPI - " +
           order.pharmacy_id.pharma_name +
           " | " +
           moment(order.created_at).format("YYYY/DD/MM"),
-        attachments: [
-          {
-            filename:
-              "SalesOrder_Medicento_" +
-              order.pharmacy_id.pharma_name +
-              "_" +
-              moment(Date.now()).format("DD-MM-YY") +
-              ".csv",
-            path: "./uploads/order.csv"
-          }
-        ]
+        attachments: [{
+          filename: "SalesOrder_Medicento_" +
+            order.pharmacy_id.pharma_name +
+            "_" +
+            moment(Date.now()).format("DD-MM-YY") +
+            ".csv",
+          path: "./uploads/order.csv"
+        }]
       });
     })
     .catch((error) => {
@@ -572,7 +605,7 @@ app.post("/csvFile", (req, res, next) => {
   res.redirect("/distributor_order");
 });
 
-app.post("/upload", isLoggedIn, upload.single("csvdata"), function(
+app.post("/upload", isLoggedIn, upload.single("csvdata"), function (
   req,
   res,
   next
@@ -587,7 +620,7 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function(
   // open uploaded file
   csv
     .fromPath(req.file.path)
-    .on("data", function(data) {
+    .on("data", function (data) {
       fileRows.push(data); // push each row
       if (data[1] != "Item name") {
         var vpi = new VpiInventory();
@@ -603,7 +636,7 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function(
         vpi.save();
       }
     })
-    .on("end", function() {
+    .on("end", function () {
       message
         .find()
         .exec()
@@ -664,6 +697,6 @@ function isLoggedIn(req, res, next) {
   }
 }
 
-app.listen(port, function() {
+app.listen(port, function () {
   console.log("Server Has Started at port : " + port);
 });
