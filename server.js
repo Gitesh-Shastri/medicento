@@ -116,17 +116,49 @@ app.post("/login", (req, res, next) => {
 });
 
 app.get("/pharmacy", (req, res, next) => {
-  date = Date.now();
-  if (doc1 == undefined) {
-    res.redirect("/pharmacy_login");
-  }
-  const title = "Dashboard";
-  console.log(doc1);
-  res.render("index", {
-    date: date,
-    deliverOrders: [],
-    title: title,
-    doc: doc1
+  SalesOrder.find().exec().then(function(orders){
+    // res.status(200).json(orders);
+    var totalOrders=0,totalSales=0;
+    var statusActive = 0,
+      statusCanceled = 0,
+      statusDelivered = 0,
+      statusNotDelivered = 0,
+      statusShipped = 0,
+      statusPacked = 0;
+    orders.forEach((order)=>{
+      if(order.pharmacy_id.equals(doc1.Allocated_Pharma) == true){
+        totalOrders++;
+        totalSales+=Number(order.grand_total);
+        if (order.status === "Active") statusActive++;
+        else if (order.status === "Delivered") statusDelivered++;
+        else if (order.status === "Canceled") statusCanceled++;
+        else if (order.status === "Not Delivered") statusNotDelivered++;
+        else if (order.status === "Packed") statusPacked++;
+        else if (order.status === "Shipped") statusShipped++;
+      }
+      // console.log(totalOrders,statusActive,statusPacked,statusShipped);
+    });
+    date = Date.now();
+    if (doc1 == undefined) {
+      res.redirect("/pharmacy_login");
+    }
+    const title = "Dashboard";
+    console.log(doc1);
+    res.render("index", {
+      date: date,
+      deliverOrders: [],
+      title: title,
+      doc: doc1,
+      totalOrders:totalOrders,
+      statusActive: statusActive,
+      statusCanceled: statusCanceled,
+      statusDelivered: statusDelivered,
+      statusActive: statusActive,
+      statusNotDelivered: statusNotDelivered,
+      statusShipped: statusShipped,
+      statusPacked: statusPacked,
+      totalSales: totalSales
+    });
   });
 });
 
