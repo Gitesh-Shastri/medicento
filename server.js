@@ -125,8 +125,10 @@ app.get("/pharmacy", (req, res, next) => {
       statusNotDelivered = 0,
       statusShipped = 0,
       statusPacked = 0;
+      var orderList=[];
     orders.forEach((order)=>{
       if(order.pharmacy_id.equals(doc1.Allocated_Pharma) == true){
+        orderList.push(order);
         totalOrders++;
         totalSales+=Number(order.grand_total);
         if (order.status === "Active") statusActive++;
@@ -138,6 +140,10 @@ app.get("/pharmacy", (req, res, next) => {
       }
       // console.log(totalOrders,statusActive,statusPacked,statusShipped);
     });
+    console.log(orderList);
+    orderList.sort(function (a, b) { return Date(a.delivery_date) - Date(b.delivery_date); })
+    orderList.reverse();
+    console.log(orderList);
     date = Date.now();
     if (doc1 == undefined) {
       res.redirect("/pharmacy_login");
@@ -157,7 +163,10 @@ app.get("/pharmacy", (req, res, next) => {
       statusNotDelivered: statusNotDelivered,
       statusShipped: statusShipped,
       statusPacked: statusPacked,
-      totalSales: totalSales
+      totalSales: totalSales,
+      order1:orderList[0],
+      order2:orderList[1],
+      order3:orderList[2],
     });
   });
 });
