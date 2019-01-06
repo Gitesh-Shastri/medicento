@@ -32,19 +32,19 @@
                             <div class="col-xs-12 col-md-6 col-lg-3">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
-                                        <span style="margin-left:30%;">20 Product(s)</span>
+                                        <span style="margin-left:30%;"><%=totalQuantity%> Product(s)</span>
                                     </div>
                                     <div class="panel-body">
                                         <h4><strong>Top Selling</strong></h4>
                                         <ul style="list-style: none;">
                                             <li>
-                                              <strong>A</strong> - <span class="badge"> 17</span>
+                                              <strong><%=OrderitemsArray[0]?OrderitemsArray[0][0]:"";%></strong> - <span class="badge"> <%=OrderitemsArray[0]?OrderitemsArray[0][1]:"";%></span>
                                             </li>
                                             <li>
-                                                <strong>B</strong> - <span class="badge"> 8</span>
+                                                <strong><%=OrderitemsArray[1]?OrderitemsArray[1][0]:"";%></strong> - <span class="badge"> <%=OrderitemsArray[1]?OrderitemsArray[1][1]:"";%></span>
                                             </li>
                                             <li>
-                                                <strong>C</strong> - <span class="badge"> 3</span>
+                                                <strong><%=OrderitemsArray[2]?OrderitemsArray[2][0]:"";%></strong> - <span class="badge"> <%=OrderitemsArray[2]?OrderitemsArray[2][1]:"";%></span>
                                             </li>
                                         </ul>
                                     </div>

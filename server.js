@@ -27,6 +27,7 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 var deepPopulate = require("mongoose-deep-populate")(mongoose);
 var csv = require("fast-csv");
+ var ObjectId = require('mongodb').ObjectID;
 const app = express();
 var datah = "Helow";
 var distributor = {};
@@ -116,59 +117,119 @@ app.post("/login", (req, res, next) => {
 });
 
 app.get("/pharmacy", (req, res, next) => {
-  SalesOrder.find().exec().then(function(orders){
-    // res.status(200).json(orders);
-    var totalOrders=0,totalSales=0;
-    var statusActive = 0,
-      statusCanceled = 0,
-      statusDelivered = 0,
-      statusNotDelivered = 0,
-      statusShipped = 0,
-      statusPacked = 0;
-      var orderList=[];
-    orders.forEach((order)=>{
-      if(order.pharmacy_id.equals(doc1.Allocated_Pharma) == true){
-        orderList.push(order);
-        totalOrders++;
-        totalSales+=Number(order.grand_total);
-        if (order.status === "Active") statusActive++;
-        else if (order.status === "Delivered") statusDelivered++;
-        else if (order.status === "Canceled") statusCanceled++;
-        else if (order.status === "Not Delivered") statusNotDelivered++;
-        else if (order.status === "Packed") statusPacked++;
-        else if (order.status === "Shipped") statusShipped++;
+  SalesOrderItems.find().exec().then(function(salesorders){
+    SalesOrder.find().exec().then(function(orders){
+      var orderDict={},OrderitemsArray=[];
+      // res.status(200).json(orders);
+      var totalOrders=0,totalSales=0;
+      var statusActive = 0,
+        statusCanceled = 0,
+        statusDelivered = 0,
+        statusNotDelivered = 0,
+        statusShipped = 0,
+        totalQuantity=0,
+        statusPacked = 0;
+        var orderList=[];
+      orders.forEach((order)=>{
+        if(order.pharmacy_id.equals(doc1.Allocated_Pharma) == true){
+          var orderarray=order.order_items;
+          for(var i=0;i<orderarray.length;i++){
+            // console.log("item",item);
+            salesorders.forEach((itm)=>{
+              if(itm._id.equals(orderarray[i]) == true){
+                console.log("found",itm);
+                if(orderDict[itm.medicento_name]!=undefined){
+                  orderDict[itm.medicento_name]+=Number(itm.quantity);
+                  totalQuantity+=Number(itm.quantity);
+                }
+                else{
+                  totalQuantity+=Number(itm.quantity);
+                  orderDict[itm.medicento_name]=Number(itm.quantity);
+                };
+                // if(i==orderarray.length-1){
+                //   OrderitemsArray = Object.keys(orderDict).map(function(key) {
+                //       return [key, orderDict[key]];
+                //     });
+                //     // Sort the array based on the second element
+                //     OrderitemsArray.sort(function(first, second) {
+                //       return second[1] - first[1];
+                //     });
+                // };
+              }
+            });
+            SalesOrderItems.find({_id:ObjectId(orderarray[i])}).exec().then(function(itm){
+
+            });
+
+          }
+          // order.order_items.forEach((item)=>{
+          // });
+
+          // .then(function(){
+          //   OrderitemsArray = Object.keys(orderDict).map(function(key) {
+          //     return [key, orderDict[key]];
+          //   });
+          //   // Sort the array based on the second element
+          //   OrderitemsArray.sort(function(first, second) {
+          //     return second[1] - first[1];
+          //   });
+          // });
+          orderList.push(order);
+          totalOrders++;
+          totalSales+=Number(order.grand_total);
+          if (order.status === "Active") statusActive++;
+          else if (order.status === "Delivered") statusDelivered++;
+          else if (order.status === "Canceled") statusCanceled++;
+          else if (order.status === "Not Delivered") statusNotDelivered++;
+          else if (order.status === "Packed") statusPacked++;
+          else if (order.status === "Shipped") statusShipped++;
+        }
+        // console.log("dict",orderDict);
+
+        // console.log(totalOrders,statusActive,statusPacked,statusShipped);
+      });
+      console.log("dict",orderDict);
+      OrderitemsArray = Object.keys(orderDict).map(function(key) {
+            return [key, orderDict[key]];
+          });
+          // Sort the array based on the second element
+          OrderitemsArray.sort(function(first, second) {
+            return second[1] - first[1];
+          });
+      orderList.sort(function (a, b) { return Date(a.delivery_date) - Date(b.delivery_date); })
+      orderList.reverse();
+      // console.log(orderList);
+      date = Date.now();
+      if (doc1 == undefined) {
+        res.redirect("/pharmacy_login");
       }
-      // console.log(totalOrders,statusActive,statusPacked,statusShipped);
-    });
-    console.log(orderList);
-    orderList.sort(function (a, b) { return Date(a.delivery_date) - Date(b.delivery_date); })
-    orderList.reverse();
-    console.log(orderList);
-    date = Date.now();
-    if (doc1 == undefined) {
-      res.redirect("/pharmacy_login");
-    }
-    const title = "Dashboard";
-    console.log(doc1);
-    res.render("index", {
-      date: date,
-      deliverOrders: [],
-      title: title,
-      doc: doc1,
-      totalOrders:totalOrders,
-      statusActive: statusActive,
-      statusCanceled: statusCanceled,
-      statusDelivered: statusDelivered,
-      statusActive: statusActive,
-      statusNotDelivered: statusNotDelivered,
-      statusShipped: statusShipped,
-      statusPacked: statusPacked,
-      totalSales: totalSales,
-      order1:orderList[0],
-      order2:orderList[1],
-      order3:orderList[2],
+      const title = "Dashboard";
+      console.log(doc1);
+      res.render("index", {
+        date: date,
+        deliverOrders: [],
+        title: title,
+        doc: doc1,
+        totalOrders:totalOrders,
+        statusActive: statusActive,
+        statusCanceled: statusCanceled,
+        statusDelivered: statusDelivered,
+        statusActive: statusActive,
+        statusNotDelivered: statusNotDelivered,
+        statusShipped: statusShipped,
+        statusPacked: statusPacked,
+        totalSales: totalSales,
+        order1:orderList[0],
+        order2:orderList[1],
+        order3:orderList[2],
+        orderDict:orderDict,
+        totalQuantity:totalQuantity,
+        OrderitemsArray:OrderitemsArray,
+        // totalQuantity:totalQuantity
+      });
     });
   });
+
 });
 
 app.get("/order", (req, res, next) => {});
