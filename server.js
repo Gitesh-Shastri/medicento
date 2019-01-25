@@ -25,6 +25,7 @@ mongoose.connect(
   }
 );
 mongoose.Promise = global.Promise;
+var tulsipharma = require('./models/tulsimedicines');
 var deepPopulate = require("mongoose-deep-populate")(mongoose);
 var csv = require("fast-csv");
  var ObjectId = require('mongodb').ObjectID;
@@ -324,10 +325,11 @@ app.post("/dlogin", (req, res, next) => {
       .then((doc) => {
         if (doc == null) {
           res.redirect("/distributor_login");
-        }
+        } else {
         console.log(doc);
         req.session.dist = doc;
         res.redirect("/distributor");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -364,11 +366,23 @@ app.post("/upload_tulsi", upload.single("csvdata"), function (req, res, next) {
   csv
     .fromPath(req.file.path)
     .on("data", function (data) {
-      fileRows.push(data); // push each row
+      if(data[2] == '' && data[3] == '' && data[4] == '' ) {
+        comp.push(data[1]);  
+      } else {
+        data[5] = comp.slice(-1)[0]; 
+        const tulsipharma1 = new  tulsipharma();
+        tulsipharma1.Item_name = data[2];
+        tulsipharma1.item_code = data[1];
+        tulsipharma1.manfc_name = data[5];
+        tulsipharma1.packing = data[3];
+        tulsipharma1.ProHsnNo = data[8];
+        tulsipharma1.save(); 
+        fileRows.push(data);
+      }
     })
     .on("end", function () {
-      datah = fileRows;
-      res.redirect("/distributor_product_tulsi");
+      datah = fileRows.splice(0, 100);
+      res.status(200).json(datah);
       // remove temp file
       //process "fileRows" and respond
     });
@@ -785,6 +799,17 @@ app.get(
 app.get("/distributor_review", (req, res, next) => {
   const title = "Review";
   res.render("distributor_review");
+});
+
+app.get('/tulsijson', (req, res, next) => {
+  tulsipharma.find()
+  .exec()
+  .then( doc => {
+    res.status(200).json({Items: doc});
+  })
+  .catch( err => {
+    res.status(400).json({err: err})
+  });
 });
 
 app.get("**", (req, res, next) => {
