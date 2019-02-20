@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const multer = require("multer");
 const pharmacy = require("./models/pharmacy");
+const area = require("./models/area");
 const fs = require("fs");
 const User = require("./models/user");
 const mongoose = require("mongoose");
@@ -61,6 +62,19 @@ app.use(
 );
 var upload = multer({
   dest: "uploads/"
+});
+
+app.get('/update', (req, res, next) => {
+  pharmacy.updateMany({}, {$set: {area: '5c4b6197948420095c947a49'}})
+  .exec(  )
+  .then( doc => {
+    console.log(doc);
+    res.status(200).json(doc);
+  })
+  .catch(err => {
+    console.log(err);
+    res.redirect('/');
+  })
 });
 
 app.get("/pharmacy_login", (req, res, next) => {
@@ -233,8 +247,6 @@ app.get("/pharmacy", (req, res, next) => {
 
 });
 
-app.get("/order", (req, res, next) => {});
-
 app.get("/pharmacy_orders", (req, res, next) => {
   const title = "Orders";
   if (doc1 == undefined) {
@@ -289,6 +301,14 @@ app.get("/distributor_login", (req, res, next) => {
   res.render("distributor_login");
 });
 
+app.get("/distributor_sign_up", (req, res, next) => {
+  res.render("distributor-sign-up");
+});
+
+app.get("/distributor_add_retailer", (req, res, next) => {
+  res.render("distributor_add_retailer");
+});
+
 app.get("/distributor_product_tulsi", (req, res, next) => {
   if (datah == "Helow") {
     console.log("Not");
@@ -311,18 +331,14 @@ app.get("/distributor_product_tulsi", (req, res, next) => {
 app.post("/dlogin", (req, res, next) => {
   if (req.body.email == "medicento@test.com" && req.body.password == "test") {
     res.redirect("/distributor_static");
-  } else if (
-    req.body.email == "tulsipharma@yahoo.co.in" &&
-    req.body.password == "tulsimed"
-  ) {
-    res.redirect("/distributor_tulsi");
-  } else {
+  }  else {
     Dist.findOne({
         email: req.body.email,
         password: req.body.password
       })
       .exec()
       .then((doc) => {
+        console.log(doc);
         if (doc == null) {
           res.redirect("/distributor_login");
         } else {
@@ -356,6 +372,55 @@ app.get("/distributor_order_tulsi", (req, res, next) => {
   res.render("distributor_order_tulsi", {
     title: "Orders"
   });
+});
+
+app.get("/updateRetailer", (req, res, next) => {
+  pharmacy.findById('5c51eaa09b640104a9c071ea').exec().then(doc => {
+    console.log(doc);
+    doc.area = '5c51d855f846e70257eb1939';
+    doc.distributor = 'tulsi';
+    doc.distributor_Code = '77864';
+    doc.save();
+    console.log(doc);
+    res.status(200).json({message: "updated", pharmacy: doc});
+  }).catch(err => {
+    console.log(err);
+    res.status(200).json({message: "not updated"});
+  })
+});
+
+app.get('/retailer_page', isLoggedIn, (req, res, next) => {
+  if(req.session.dist.email=='tulsipharma@yahoo.co.in') {
+  pharmacy.find({distributor: "tulsi"}).populate('area').exec()
+  .then( doc => {
+    res.render('retailer', {
+      title: "Retailers",
+      retailers: doc
+    });
+  })
+  .catch( err=> {
+    console.log(err);
+    res.render('retailer', {
+      title: "Retailers",
+      retailers: []
+    });
+  });
+  } else {
+    pharmacy.find({distributor: {$not: /^tulsi.*/}}).populate('area').exec()
+  .then( doc => {
+    res.render('retailer', {
+      title: "Retailers",
+      retailers: doc
+    });
+  })
+  .catch( err=> {
+    console.log(err);
+    res.render('retailer', {
+      title: "Retailers",
+      retailers: []
+    });
+  });
+  }
 });
 
 app.post("/upload_tulsi", upload.single("csvdata"), function (req, res, next) {
@@ -528,7 +593,7 @@ app.get("/distributor", isLoggedIn, (req, res, next) => {
     statusPacked = 0;
   var list = [];
   pharmacy
-    .find()
+    .find({distributor: "tulsi"})
     .exec()
     .then(function (pharm) {
       pharm.forEach((member) => {

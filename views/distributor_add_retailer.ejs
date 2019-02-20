@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Distributor Login</title>
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      input {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <h5
+        style="margin:0;padding:20px;text-align:center;color:white;background: teal"
+      >
+        Add Your Retailer To Medicento!
+      </h5>
+      <form style="margin-left:20%;margin-right: 20%;margin-top: 3%;">
+        <div class="row" style="margin-bottom: 0px; ">
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Enter Shop Name"
+              id="pharmacy_name"
+              type="text"
+              class="validate"
+            />
+            <label for="pharmacy_name">Pharmacy Name</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Distributor Party Code"
+              id="party_code"
+              type="text"
+              class="validate"
+            />
+            <label for="party_code">Distributor Party Code</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Owner Name"
+              id="owner_name"
+              type="text"
+              class="validate"
+            />
+            <label for="owner_name">Owner Name</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Phone Number"
+              id="phone"
+              type="text"
+              class="validate"
+            />
+            <label for="phone">Phone Number</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Email Id"
+              id="email"
+              type="email"
+              class="validate"
+            />
+            <label for="email">Email Id</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Address"
+              id="address"
+              type="text"
+              class="validate"
+            />
+            <label for="address">Address</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Karnataka"
+              id="state"
+              type="text"
+              class="validate"
+              disabled
+            />
+            <label for="state">State</label>
+          </div>
+          <div class="input-field col s6 m6">
+            <select id="select">
+              <option value="" disabled selected>Select City</option>
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
+              <option value="3">Option 3</option>
+            </select>
+          </div>
+          <div class="input-field col s6 m5">
+            <select id="select">
+              <option value="" disabled selected>Select Area</option>
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
+              <option value="3">Option 3</option>
+            </select>
+          </div>
+          <div class="input-field col s1 m1">
+            <button
+              class="btn-floating btn-large waves-effect waves-light red"
+              style="
+                                    margin-top: 9px;line-height: 45px;width:30px;height:30px;"
+            >
+              <i class="material-icons" style="line-height: 30px;">add</i>
+            </button>
+          </div>
+
+          <div class="input-field col s6 m6">
+            <input
+              placeholder="Pincode"
+              id="Pincode"
+              type="number"
+              class="validate"
+            />
+            <label for="pincode">Pincode</label>
+          </div>
+          <div class="input-field col s4 m4">
+            <input
+              placeholder="GST Number"
+              id="gst"
+              type="text"
+              class="validate"
+              style="width:85%"
+            />
+            <button
+              class="btn-floating btn-large waves-effect waves-light teal"
+              style="
+                    margin-top: 9px;line-height: 42px;width:30px;height:30px;"
+            >
+              <i
+                class="material-icons"
+                style="line-height: 35px;font-size: 1.2rem;"
+                >linked_camera</i
+              >
+            </button>
+
+            <label for="gst">GST Number</label>
+          </div>
+          <div class="input-field col s4 m4">
+            <input
+              placeholder="Drug Licnese"
+              id="drug"
+              type="text"
+              class="validate"
+              style="width:85%"
+            />
+            <button
+              class="btn-floating btn-large waves-effect waves-light teal"
+              style="
+                            margin-top: 9px;line-height: 42px;width:30px;height:30px;"
+            >
+              <i
+                class="material-icons"
+                style="line-height: 35px;font-size: 1.2rem;"
+                >linked_camera</i
+              >
+            </button>
+
+            <label for="drug">Drug License Number</label>
+          </div>
+          <div class="input-field col s4 m4">
+            <input
+              placeholder="Pan Card Number"
+              id="drug"
+              type="text"
+              class="validate"
+              style="width:85%"
+            />
+            <button
+              class="btn-floating btn-large waves-effect waves-light teal"
+              style="
+                            margin-top: 9px;line-height: 42px;width:30px;height:30px;"
+            >
+              <i
+                class="material-icons"
+                style="line-height: 30px;font-size: 1.2rem;"
+                >linked_camera</i
+              >
+            </button>
+
+            <label for="pan">Pan Card Number</label>
+          </div>
+          <button
+            style="margin-left: 40%;"
+            type="submit"
+            class="waves-effect waves-light btn"
+          >
+            <i class="material-icons left">add</i>Add Retailer
+          </button>
+          <a></a>
+        </div>
+      </form>
+      <p style="text-align:center;margin-top:5px;">
+        By Clicking You agree to Medicento's <a href="#">Terms of service</a>
+      </p>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+    ></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $("select").material_select();
+      });
+    </script>
+  </body>
+</html>

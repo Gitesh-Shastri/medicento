@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags always come first -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Retailers</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/pharma.css">
+        <!-- Bootstrap core CSS -->
+        <link href="css/style.min.css" rel="stylesheet">
+    </head>
+    <body><nav class="navbar navbar-inverse no-margin navbar-fixed-top">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header fixed-brand">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+                <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+            </button>
+            <a class="navbar-brand" href="/distributor_tulsi"><i class="fa fa-user"></i> TULSI PHARMA</a>
+        </div>
+        <!-- navbar-header-->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/distributor_tulsi"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="/distributor_logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                <li><a href=""></a></li>
+            </ul>
+        </div>
+        <!-- bs-example-navbar-collapse-1 -->
+    </nav>
+    <div id="wrapper">
+        <!-- Sidebar --> 
+        <div id="sidebar-wrapper">
+        <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+            <% if(title == 'Dashboard') {  %> <li class="active">
+            <% } else {%> <li> <% } %>
+                <a href="/distributor"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
+            </li>
+            <% if(title == 'Orders') {  %> <li class="active">
+            <% } else {%> <li> <% } %>
+                <a href="/distributor_order"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
+            </li>
+            <% if(title == 'Retailers') {  %> <li class="active">
+            <% } else {%> <li> <% } %>    
+                <a href="/retailer_page"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Retailers</a>
+            </li>
+            <% if(title == 'Inventoy Product') {  %> <li class="active">
+            <% } else {%> <li> <% } %>    
+                <a href="/distributor_product"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-product-hunt fa-stack-1x "></i></span>Products</a>
+            </li>
+            <% if(title == 'Billing') {  %> <li class="active">
+            <% } else {%> <li> <% } %>    
+                <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-fax fa-stack-1x "></i></span>Billing</a>
+            </li>
+            <% if(title == 'Accounting') {  %> <li class="active">
+            <% } else {%> <li> <% } %>    
+                <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dollar fa-stack-1x "></i></span>Accounting</a>
+            </li>
+        </ul>
+    </div>
+            <div id="content">
+                <div class="container" style="margin-top:2%;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="well" style="text-align:center;">
+                                <h4 class="text-danger">Total Retailers</h4>
+                                <h4><span style="color: rgb(34,34,34);font-size: 3rem;"><%= retailers.length %></span></h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="well" style="text-align:center;">
+                                <h4 class="text-primary">Total Areas</h4>
+                                <h4><span style="color: rgb(34,34,34);font-size: 3rem;">3</span></h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="well" style="text-align:center;">
+                                <h4 class="text-danger">Avergae Order Value</h4>
+                                <h4 style="margin-bottom:18px"><span style="color: rgb(34,34,34);font-size: 2.23rem;">Rs.0 (per month)</span></h4>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-primary"><i class="fa fa-plus-square"></i> &nbsp;Add Retailers</button>
+                        </div>
+                        <div class="col-md-10" style="margin-top:1%;margin-right: 2%">
+                            <table id="porder" class="table table-striped table-hover table-fw-widget" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Pharmacy Name</th>
+                                        <th>Distrubutor Pharmacy Code</th>
+                                        <th>Area</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>DLNo.</th>
+                                        <th>GSTNo.</th>
+                                        <th>PanNo.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% retailers.forEach((retailer) => {  %>
+                                         <tr>
+                                             <td><%=  retailer.pharma_name%></td>
+                                             <td><%=  retailer.distributor_Code %></td>
+                                             <td><%=  retailer.area.area_name%></td>
+                                             <td><%=  retailer.pharma_address%></td>
+                                             <td><%=  retailer.area.area_city%></td>
+                                             <td><%=  retailer.area.area_state%></td>
+                                             <td><%=  retailer.drug_license%></td>
+                                             <td><%=  retailer.gst_license%></td>
+                                             <td><%=  retailer.pan_card%></td>
+                                         </tr>       
+                                    <% }) %>    
+                                </tbody>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+        </div>
+        <!-- /#wrapper -->
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/pharma.js"></script>
+        <script src="js/canvas.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
+        <script>
+         $('#porder').dataTable();
+
+        </script>
+    </body>
+</html>
