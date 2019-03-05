@@ -872,7 +872,6 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function (
          tulsipharma1.qty = data_new[5];
          tulsipharma1.mrp = data_new[3];
          tulsipharma1.save(); 
-         console.log(tulsipharma1);
         fileRows.push(data_new);
     })
     .on("end", function () {
