@@ -18,6 +18,7 @@ const Product = require("./models/Product");
 const message = require("./models/message");
 const VpiInventory = require("./models/vpimedicine");
 const Inventoy = require("./models/InventoryProduct");
+const tulsimedicines = require('./models/tulsimedicines');
 const Dist = require("./models/Inventory");
 mongoose.connect(
   MONGODB_URI,
@@ -428,24 +429,32 @@ app.post("/upload_tulsi", upload.single("csvdata"), function (req, res, next) {
   const product = [];
   const comp = [];
   var count1 = 0;
+  tulsimedicines.remove({}).exec();
   csv
     .fromPath(req.file.path)
     .on("data", function (data) {
-      if(data[2] == '' && data[3] == '' && data[4] == '' ) {
-        comp.push(data[1]);  
-      } else {
-        data[5] = comp.slice(-1)[0]; 
-        const tulsipharma1 = new  tulsipharma();
-        tulsipharma1.Item_name = data[2];
-        tulsipharma1.item_code = data[1];
-        tulsipharma1.manfc_name = data[5];
-        tulsipharma1.packing = data[3];
-        tulsipharma1.ProHsnNo = data[8];
-        tulsipharma1.save(); 
-        fileRows.push(data);
-      }
+        let data_new = data[0].split('|');
+         let tulsipharma1 = new  tulsimedicines();
+         tulsipharma1.Item_name = data_new[1];
+         tulsipharma1.item_code = data_new[0];
+         tulsipharma1.manfc_name = data_new[8];
+         tulsipharma1.packing = data_new[2];
+         tulsipharma1.qty = data_new[5];
+         tulsipharma1.mrp = data_new[3];
+         tulsipharma1.save(); 
+         console.log(tulsipharma1);
+        fileRows.push(data_new);
     })
     .on("end", function () {
+      message
+        .find()
+        .exec()
+        .then((mess) => {
+          mess[0].count = mess[0].count + 1;
+          mess[0].save();
+          console.log(mess[0]);
+        })
+        .catch();
       datah = fileRows.splice(0, 100);
       res.status(200).json(datah);
       // remove temp file
@@ -797,20 +806,18 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function (
   var count1 = 0;
   if (req.session.dist.email == "contact@vpiindia.com") {
     VpiInventory.remove({}).exec();
-  }
-  // open uploaded file
-  csv
+    csv
     .fromPath(req.file.path)
     .on("data", function (data) {
       fileRows.push(data); // push each row
       if (data[1] != "Item name") {
         var vpi = new VpiInventory();
-        vpi.Item_name = data[1];
-        vpi.batch_no = data[2];
-        vpi.expiry_date = data[3];
-        vpi.qty = data[4];
-        vpi.packing = data[5];
-        vpi.item_code = data[0];
+        vpi.Item_name = data[0];
+        vpi.batch_no = data[1];
+        vpi.expiry_date = data[2];
+        vpi.qty = data[3];
+        vpi.packing = data[4];
+        vpi.item_code = data[9];
         vpi.mrp = data[6];
         vpi.manfc_code = data[7];
         vpi.manfc_name = data[8];
@@ -833,6 +840,94 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function (
       // remove temp file
       //process "fileRows" and respond
     });
+  } else if(req.session.dist.email=='tulsipharma@yahoo.co.in') {
+    const fileRows = [];
+  const product = [];
+  const comp = [];
+  var count1 = 0;
+  let data_heading = [];
+  data_heading.push('Item  Code');
+  data_heading.push('Product');
+  data_heading.push('Packing');
+  data_heading.push('PTR');
+  data_heading.push('MRP');
+  data_heading.push('QTY');
+  data_heading.push('Scheme');
+  data_heading.push('-');
+  data_heading.push('Manufacturer');
+  data_heading.push('-');
+  
+  
+  fileRows.push(data_heading);
+  tulsimedicines.remove({}).exec();
+  csv
+    .fromPath(req.file.path)
+    .on("data", function (data) {
+        let data_new = data[0].split('|');
+         let tulsipharma1 = new  tulsimedicines();
+         tulsipharma1.Item_name = data_new[1];
+         tulsipharma1.item_code = data_new[0];
+         tulsipharma1.manfc_name = data_new[8];
+         tulsipharma1.packing = data_new[2];
+         tulsipharma1.qty = data_new[5];
+         tulsipharma1.mrp = data_new[3];
+         tulsipharma1.save(); 
+         console.log(tulsipharma1);
+        fileRows.push(data_new);
+    })
+    .on("end", function () {
+      message
+        .find()
+        .exec()
+        .then((mess) => {
+          mess[0].count = mess[0].count + 1;
+          mess[0].save();
+          console.log(mess[0]);
+        })
+        .catch();
+      datah = fileRows.splice(0, 100);
+      pro = datah;
+      res.redirect("/distributor_product");
+      // remove temp file
+      //process "fileRows" and respond
+    });
+  }
+  // open uploaded file
+  
+});
+
+app.get('/vpimediceine', (Req, res, next) => {
+  tulsimedicines.find({})
+  .sort({Item_name: 1})
+  .then(function(items) {      
+    var mediceines = [];
+    mediceines.push([
+      "Item_Name",
+      "Manf_Name",
+      "Qty",
+      "Id"
+    ]);
+      for(var i=0;i<items.length;i++) {
+          mediceines.push([
+            items[i].Item_name,
+            items[i].manfc_name,
+            items[i].qty,
+            items[i]._id
+          ])
+          if(i == items.length-1) {  
+          var ws = fs.createWriteStream("./uploads/tulsimedicines.csv");
+          csv.write(mediceines, {
+            headers: true
+          }).pipe(ws);
+          res.status(200).json({count:mediceines.length});
+          break;
+        }
+      }
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(200).json(err);
+  })
 });
 
 app.get(
