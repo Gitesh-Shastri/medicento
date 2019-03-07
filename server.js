@@ -707,7 +707,6 @@ app.get("/distributor_order", isLoggedIn, (req, res, next) => {
     .populate("sales_person_id")
     .exec()
     .then((docu) => {
-      console.log(docu[0]);
       res.render("distributor_orders", {
         title: "Orders",
         doc: doc1,
@@ -726,41 +725,52 @@ app.post("/csvFile", (req, res, next) => {
     .populate("pharmacy_id")
     .exec()
     .then((order) => {
-      console.log(order);
-      var arr = [];
+      console.log(order.pharmacy_id.distributor_Code);
+       var arr = [];
       arr.push([
-        "Order_id",
-        "created_at",
-        "pharmacy_name",
-        "grand_total",
-        "order_item_id",
-        "medicine_name",
-        "quantity",
-        "price",
-        "manufacturer_name",
-        "total_amount"
-      ]);
+        "Order|"+
+        "DATE|"+
+        "PARTYCODE|"+
+        "PARTY NAME|"+
+        "0|"+
+        "PRODUCT CODE"+
+        "PRODUCTNAME||"+
+        "QTY|"+
+        "FREE|"+
+        "REPL|"+
+        "PTR|"+
+        "MRP|"]
+      );
       arr.push([
-        order._id,
-        moment(order.created_at).format("YYYY/DD/MM"),
-        order.pharmacy_id.pharma_name,
-        order.grand_total,
-        order.order_items[0]._id,
-        order.order_items[0].medicento_name,
-        order.order_items[0].quantity,
-        order.order_items[0].paid_price,
-        order.order_items[0].company_name,
-        order.order_items[0].total_amount
+        order.sales_order_code+"|"+
+        moment(order.created_at).format("DD-MMM-YYYY")+"|"+
+        order.pharmacy_id.distributor+"|"+
+        order.pharmacy_id.pharma_name+"|"+
+        "0|"+
+        order.order_items[0].code+"|"+
+        order.order_items[0].medicento_name+"||"+
+        order.order_items[0].quantity+"|"+
+        "0|"+
+        "0|"+
+        order.order_items[0].paid_price+
+        order.order_items[0].paid_price
       ]);
+      console.log(arr);
       if (order.order_items.length > 1) {
         for (var i = 1; i < order.order_items.length; i++) {
-          arr.push([, , , ,
-            order.order_items[i]._id,
-            order.order_items[i].medicento_name,
-            order.order_items[i].quantity,
-            order.order_items[i].paid_price,
-            order.order_items[i].company_name,
-            order.order_items[i].total_amount
+          arr.push([
+        order.sales_order_code+"|"+
+        moment(order.created_at).format("DD-MMM-YYYY")+"|"+
+        order.pharmacy_id.distributor_Code+"|"+
+        order.pharmacy_id.pharma_name+"|"+
+        "0|"+
+        order.order_items[i].code+"|"+
+        order.order_items[i].medicento_name+"||"+
+        order.order_items[i].quantity+"|"+
+        "0|"+
+        "0|"+
+        order.order_items[i].paid_price+
+        order.order_items[i].paid_price
           ]);
         }
       }
@@ -883,7 +893,9 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function (
           mess[0].save();
           console.log(mess[0]);
         })
-        .catch();
+        .catch(err => {
+          console.log(err);
+        });
       datah = fileRows.splice(0, 100);
       pro = datah;
       res.redirect("/distributor_product");
