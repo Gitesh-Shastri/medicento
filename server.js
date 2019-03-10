@@ -881,6 +881,8 @@ app.post("/upload", isLoggedIn, upload.single("csvdata"), function (
          tulsipharma1.packing = data_new[2];
          tulsipharma1.qty = data_new[5];
          tulsipharma1.mrp = data_new[3];
+         tulsipharma1.ptr = data_new[4];
+         tulsipharma1.scheme = data_new[6];
          tulsipharma1.save(); 
         fileRows.push(data_new);
     })
