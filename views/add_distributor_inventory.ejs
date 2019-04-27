@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+   
+    <form id="2020data">
+        <input type="file" name="csvFile">
+        <button type="submit" class="btn btn-default">Upload CSV File</button>
+      </form>
+
+      
+      <script src="js/jquery-3.3.1.min.js"></script>
+      <script>
+      $("#2020data").submit(function(e) {
+
+        $.ajax({
+        url: "/test",
+        type: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false
+        });
+
+        return false;
+        });
+      </script>
+      
+</body>
+</html>
