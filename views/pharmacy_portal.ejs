@@ -1,6 +1,6 @@
-<!-- Main layout for retailer portal--->
+<!-- main layout of retailer portal--->
 
-<% pharmacy_header.ejs %>
+<% include pharmacy_header.ejs %>
    <nav class="navbar navbar-inverse no-margin navbar-fixed-top">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header fixed-brand">
@@ -12,7 +12,7 @@
         <!-- navbar-header-->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <!--<li><a href="/pharmacy"><span class="glyphicon glyphicon-home"></span></a></li>-->
+                <li><a href="/pharmacy"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li><a href="/pharmacy"><span class="glyphicon glyphicon-bell"></span></a></li>
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
                 <li><a href="/pharmacy"></a></li>
@@ -24,16 +24,14 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
-                <% if(title == 'Home') {  %> <li class="active">
-                <% } else {%> <li> <% } %>
-                    <a href="/pharmacy"><span class="fa-stack fa-lg pull-left"><i class="fa fa-home fa-stack-1x"></i></span> Home</a>
                 </li>
                 <% if(title == 'Dashboard') {  %> <li class="active">
                 <% } else {%> <li> <% } %>
                     <a href="/pharmacy"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
                 </li>
+
                 <li>
-                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dollar fa-stack-1x "></i></span>Invoice download</a>
+                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dollar fa-stack-1x "></i></span>Invoice Print</a>
                 </li>
                 <li>
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user fa-stack-1x "></i></span>Profile</a>
@@ -44,4 +42,3 @@
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
-

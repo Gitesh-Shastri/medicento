@@ -271,6 +271,28 @@ app.get('/pharmacy_orders', (req, res, next) => {
 		});
 });
 
+app.get('/pharmacy_home', (req, res, next) => {
+	const title = 'Home';
+	if (doc1 == undefined) {
+		res.redirect('/pharmacy_login');
+	}
+	Products.find()
+		.populate('product_id', 'medicento_name company_name total_stock')
+		.populate('inventory_product_id', 'stock_left')
+		.exec()
+		.then((prod) => {
+			console.log(prod);
+			res.render('pharmacy_home', {
+				title: title,
+				doc: doc1,
+				prod: prod
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+});
+
 app.get('/pharmacy_product', (req, res, next) => {
 	const title = 'Product';
 	if (doc1 == undefined) {
