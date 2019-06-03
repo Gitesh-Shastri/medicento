@@ -1,6 +1,6 @@
 <!-- main layout of retailer portal--->
-
 <% include pharmacy_header.ejs %>
+<main>
    <nav class="navbar navbar-inverse no-margin navbar-fixed-top">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header fixed-brand">
@@ -29,6 +29,10 @@
                 <% } else {%> <li> <% } %>
                     <a href="/pharmacy"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
                 </li>
+                <% if(title == 'Orders') {  %> <li class="active">
+                <% } else {%> <li> <% } %>
+                    <a href="/pharmacy_orders"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cart-arrow-down fa-stack-1x "></i></span>Orders</a>
+                </li>
 
                 <li>
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dollar fa-stack-1x "></i></span>Invoice Print</a>
@@ -39,6 +43,8 @@
                 <li>
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cog fa-stack-1x "></i></span>Settings</a>
                 </li>
+
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
+</main>

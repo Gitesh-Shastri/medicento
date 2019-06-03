@@ -1,0 +1,123 @@
+<!----Layout of order table---->
+<% include pharmacy_home.ejs %>
+<div class="container">
+    <div id="active">
+        <h4 class="d-flex justify-content-left" style="margin-left: 5px;font-family: Time new roman;">Order list: </h4>
+        <table class="tableData" class="table responsive-table" style="font-family: Time new roman; font-size: 15px;" >
+            <thead>
+                <th>Items</th>
+                <th>Pack</th>
+                <th>MRP</th>
+                <th>PTR</th>
+                <th>Scheme</th>
+                <th>Quantitiy</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                <tr>
+                  <td>
+                    parocetamol 30 ml
+                  </td>
+                  <td>
+                    1/pack
+                  </td>
+                  <td>
+                    28
+                  </td>
+                  <td>
+                    25
+                  </td>
+                  <td>
+                    --
+                  </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+  </main>
+<script>
+  // SideNav Initialization
+  $(".button-collapse").sideNav();
+  new WOW().init();
+
+  $(document).ready(function () {
+    $('.tableData').DataTable({
+      responsive: true,
+      "order": [
+        [0, "desc"]
+      ]
+    });
+    $('select').material_select();
+  });
+
+  function myRow(divName) {
+    if (document.getElementById(divName).style.display == "none") {
+      document.getElementById(divName).style.display = "block";
+    } else {
+      document.getElementById(divName).style.display = "none";
+    }
+  }
+
+  function changeStatus(id) {
+    console.log(id);
+    status = $('#s' + id).val();
+    var order = {
+      order_id: id,
+      status: status
+    };
+    $.ajax({
+      url: 'changeStatus/',
+      type: 'POST',
+      data: order,
+      success: (data) => {
+        console.log('Sucess', data);
+        Snackbar.show({
+          text: "Status Changed",
+          pos: 'top-left'
+        });
+        location.reload();
+      }
+    })
+  }
+
+  function download(divName) {
+    date = new Date();
+    var printContents = document.getElementById(divName).innerHTML;
+    var pdf = new jsPDF();
+    pdf.text(5, 5, document.getElementById(divName).innerText);
+    pdf.save('Order - ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + '.pdf');
+  }
+
+  function changeState(data1, state) {
+    var order = {
+      order_id: data1,
+      state: state
+    };
+    $.ajax({
+      url: 'changeSate/',
+      type: 'POST',
+      data: order,
+      success: (data) => {
+        console.log('Sucess', data);
+        Snackbar.show({
+          text: "Chnage State Successful",
+          pos: 'top-left'
+        });
+      }
+    })
+  }
+
+  function printDiv(divName) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+</script>
+
+</body>
+
+</html>
