@@ -7,8 +7,14 @@ th, td {
   text-align: centre;
 }
 
+tbody{
+    height: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .btn {
-  background-color: DodgerBlue;
+  background-color: red;
   border: none;
   border-radius: 15px;
   color: white;
