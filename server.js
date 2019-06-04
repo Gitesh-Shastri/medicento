@@ -276,22 +276,37 @@ app.get('/pharmacy_home', (req, res, next) => {
 	if (doc1 == undefined) {
 		res.redirect('/pharmacy_login');
 	}
+	active = 'index';
+	activeOrders = [];
+	cancelOrders = [];
 	Products.find()
-		.populate('product_id', 'medicento_name company_name total_stock')
-		.populate('inventory_product_id', 'stock_left')
+		.populate('pharmacy_id')
+		.populate('order_items')
 		.exec()
-		.then((prod) => {
-			console.log(prod);
+		.then((orders) => {
+			orders.forEach((order) => {
+				if (order.status == 'Active') {
+					activeOrders.push(order);
+				}
+				if (order.status == 'Canceled') {
+					cancelOrders.push(order);
+				}
+
+			});
 			res.render('pharmacy_home', {
 				title: title,
 				doc: doc1,
-				prod: prod
+				orders: orders,
+				active: active,
+				activeOrders: activeOrders,
+				cancelOrders: cancelOrders,
 			});
 		})
 		.catch((err) => {
 			console.log(err);
 		});
 });
+
 
 app.get('/pharmacy_product', (req, res, next) => {
 	const title = 'Product';
