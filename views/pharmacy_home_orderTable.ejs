@@ -1,0 +1,87 @@
+<!---Table structure--->
+<main>
+<link rel="stylesheet" href="css/order_table.css">
+<!---table --->
+<div class="container">
+    <div id="active" style="margin-top: 75px;">
+        <h3 class="d-flex justify-content-center">Order List:</h3>
+        <table class="tableData" class="table responsive-table" style="width: 75%;" >
+            <thead>
+                <th>Items</th>
+                <th>Pack</th>
+                <th>MRP</th>
+                <th>PTR</th>
+                <th>Scheme</th>
+                <th>Quantity</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        paracetamol 30 ml
+                    </td>
+                    <td>
+                        1/pack
+                    </td>
+                    <td>
+                        28
+                    </td>
+                    <td>
+                        25
+                    </td>
+                    <td>
+                        ----
+                    </td>
+                    <td>
+                        <form>
+                        <input type="number" min="1" max="10000000" value="1" style="width: 30%;" >
+                        </form>
+                    </td>
+                    <td>
+                        <button class="btn" style=""><i class="fa fa-close"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        paracetamol 30 ml
+                    </td>
+                    <td>
+                        1/pack
+                    </td>
+                    <td>
+                        28
+                    </td>
+                    <td>
+                        25
+                    </td>
+                    <td>
+                        ----
+                    </td>
+                    <td>
+                        <form>
+                        <input type="number" min="1" max="10000000" value="1" style="width: 30%;" >
+                        </form>
+                    </td>
+                    <td>
+                        <button class="btn" style=""><i class="fa fa-close"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <strong><span style="color: black;cursor: pointer;width: 10%;margin-left: 700px;">Subtotal : ₹ </span></strong>
+    </div>
+   <button type="submit" value="Submit"  onclick='show(1);'style="background-color: DodgerBlue;color: #fff;cursor: pointer;width: 10%;height: 40px;margin-left: 25px; margin-top:50px;">Submit</button>
+
+</main>
+
+<script>
+  $('button').click(function(e){
+   $(this).closest('tr').remove()
+})
+
+function show(nr) {
+    document.getElementById("tableData").style.display="none";
+}
+
+
+</script>
