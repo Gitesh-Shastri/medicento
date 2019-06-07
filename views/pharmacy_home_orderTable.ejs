@@ -3,9 +3,10 @@
 <link rel="stylesheet" href="css/order_table.css">
 <!---table --->
 <div class="container">
+    <div id="order_table" style="display: none;">
     <div id="active" style="margin-top: 75px;">
         <h3 class="d-flex justify-content-center">Order List:</h3>
-        <table class="tableData" class="table responsive-table" style="width: 75%;" >
+        <table class="tableData" class="table responsive-table" style="width: 75%" >
             <thead>
                 <th>Items</th>
                 <th>Pack</th>
@@ -71,16 +72,35 @@
         <strong><span style="color: black;cursor: pointer;width: 10%;margin-left: 700px;">Subtotal : ₹ </span></strong>
     </div>
    <button type="submit" value="Submit"  onclick='show(1);'style="background-color: DodgerBlue;color: #fff;cursor: pointer;width: 10%;height: 40px;margin-left: 25px; margin-top:50px;">Submit</button>
-
+</div>
 </main>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    var medicine = [
+      "dolo 250mg 10/pack", "Dolo 250mg 10/pack","Dolo 250mg 10/pack","Dolo 250mg 10/pack"
+    ];
+    $( "#auto" ).autocomplete({
+      source: medicine
+    });
+  } );
+  </script>
 
 <script>
   $('button').click(function(e){
    $(this).closest('tr').remove()
 })
 
+$("#form").submit(function(event) {
+
+/* stop form from submitting normally */
+event.preventDefault();
+$('#order_table').show();
+});
+    
 function show(nr) {
-    document.getElementById("tableData").style.display="none";
+    $('#order_table').hide();
 }
 
 

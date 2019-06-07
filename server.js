@@ -299,9 +299,9 @@ app.get('/pharmacy_orders', (req, res, next) => {
 
 app.get('/pharmacy_home', (req, res, next) => {
 	const title = 'Home';
-	if (doc1 == undefined) {
-		res.redirect('/pharmacy_login');
-	}
+	// if (doc1 == undefined) {
+	// 	res.redirect('/pharmacy_login');
+	// }
 	active = 'index';
 	activeOrders = [];
 	cancelOrders = [];
@@ -317,7 +317,6 @@ app.get('/pharmacy_home', (req, res, next) => {
 				if (order.status == 'Canceled') {
 					cancelOrders.push(order);
 				}
-
 			});
 			res.render('pharmacy_home', {
 				title: title,
@@ -325,14 +324,13 @@ app.get('/pharmacy_home', (req, res, next) => {
 				orders: orders,
 				active: active,
 				activeOrders: activeOrders,
-				cancelOrders: cancelOrders,
+				cancelOrders: cancelOrders
 			});
 		})
 		.catch((err) => {
 			console.log(err);
 		});
 });
-
 
 app.get('/pharmacy_product', (req, res, next) => {
 	const title = 'Product';
