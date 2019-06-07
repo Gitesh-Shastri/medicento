@@ -18,7 +18,9 @@ const message = require('./models/message');
 const VpiInventory = require('./models/vpimedicine');
 const Inventoy = require('./models/InventoryProduct');
 const tulsimedicines = require('./models/tulsimedicines');
+const medicento_medicines = require('./models/medicento_medicine');
 const Dist = require('./models/Inventory');
+const Medicento_pharmacy = require('./models/medicento_pharmacy');
 mongoose.connect(MONGODB_URI, function() {
 	console.log('connected to DB');
 });
@@ -31,7 +33,7 @@ const app = express();
 var datah = 'Helow';
 var distributor = {};
 var pro = [];
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9000;
 var admin = require('firebase-admin');
 var doc1 = undefined;
 
@@ -76,6 +78,30 @@ app.get('/update', (req, res, next) => {
 			console.log(err);
 			res.redirect('/');
 		});
+});
+
+app.get('/pharmacy_creation', (req, res, next) => {
+	var pharmacy = new Medicento_pharmacy({
+		area: 'Karol Bagh',
+		city: 'Central Delhi',
+		state: 'Delhi',
+		pharma_name: 'Medicento Test Gitesh',
+		pharma_address: '16/563 H Bapa Nagar Hardhyan Singh Road Karol Bagh New Delhi - 110005',
+		gst_license: 'GST1323',
+		pharma_code: '6000',
+		password: 'Shastri@1',
+		drug_license: 'GST1212',
+		email: 'giteshshastri96@gmail.com',
+		contact: '9911806266',
+		owner_name: 'Gitesh Shastri',
+		pincode: '110006',
+		pan_card: 'Gitesh1199',
+		distributor: 'all',
+		distributor_Code: '-'
+	});
+
+	pharmacy.save();
+	res.status(200).json({ pharmacy: pharmacy });
 });
 
 app.get('/pharmacy_login', (req, res, next) => {
@@ -439,21 +465,135 @@ app.post('/upload_tulsi', upload.single('csvdata'), function(req, res, next) {
 	const product = [];
 	const comp = [];
 	var count1 = 0;
-	tulsimedicines.remove({}).exec();
+	VpiInventory.remove({}).exec();
 	csv
 		.fromPath(req.file.path)
 		.on('data', function(data) {
 			let data_new = data[0].split('|');
-			let tulsipharma1 = new tulsimedicines();
-			tulsipharma1.Item_name = data_new[1];
-			tulsipharma1.item_code = data_new[0];
-			tulsipharma1.manfc_name = data_new[8];
-			tulsipharma1.packing = data_new[2];
-			tulsipharma1.qty = data_new[5];
-			tulsipharma1.mrp = data_new[3];
+			let tulsipharma1 = new VpiInventory();
+			vpi.Item_name = data[1];
+			vpi.item_code = data[0];
+			vpi.manfc_name = data[8];
+			vpi.packing = data[3];
+			vpi.mrp = data[5];
+			vpi.distributor = 'tulsi';
+			vpi.created_at = Date.now();
 			tulsipharma1.save();
-			console.log(tulsipharma1);
-			fileRows.push(data_new);
+		})
+		.on('end', function() {
+			message
+				.find()
+				.exec()
+				.then((mess) => {
+					mess[0].count = mess[0].count + 1;
+					mess[0].save();
+					console.log(mess[0]);
+				})
+				.catch();
+			datah = fileRows.splice(0, 100);
+			res.status(200).json(datah);
+			// remove temp file
+			//process "fileRows" and respond
+		});
+});
+
+app.post('/upload_parshva', upload.single('csvdata'), function(req, res, next) {
+	// console.log(req.file);
+
+	// try {
+	// 	const csvFile = req.file.buffer.toString();
+	// 	const rows = csvFile.split('\n');
+
+	// 	for (let row of rows) {
+	// 		const columns = row.replace(/"/g, '').split('|');
+	// 		console.log(columns);
+	// 	}
+
+	// 	res.sendStatus(200);
+	// } catch (err) {
+	// 	console.log(err);
+	// 	res.sendStatus(400);
+	// }
+
+	const fileRows = [];
+	const product = [];
+	const comp = [];
+	var count1 = 0;
+	csv
+		.fromPath(req.file.path)
+		.on('data', function(data) {
+			if (data[0] != 'Code') {
+				var vpi = new VpiInventory();
+				vpi.Item_name = data[1];
+				vpi.item_code = data[0];
+				vpi.manfc_name = data[3];
+				vpi.packing = data[4];
+				vpi.mrp = data[5];
+				vpi.distributor = 'parshva';
+				vpi.created_at = Date.now();
+				vpi.save();
+			}
+			fileRows.push(data);
+		})
+		.on('end', function() {
+			message
+				.find()
+				.exec()
+				.then((mess) => {
+					mess[0].count = mess[0].count + 1;
+					mess[0].save();
+					console.log(mess[0]);
+				})
+				.catch();
+			datah = fileRows.splice(0, 100);
+			res.status(200).json(datah);
+			// remove temp file
+			//process "fileRows" and respond
+		});
+});
+
+app.post('/upload_mercury', upload.single('csvdata'), function(req, res, next) {
+	// console.log(req.file);
+
+	// try {
+	// 	const csvFile = req.file.buffer.toString();
+	// 	const rows = csvFile.split('\n');
+
+	// 	for (let row of rows) {
+	// 		const columns = row.replace(/"/g, '').split('|');
+	// 		console.log(columns);
+	// 	}
+
+	// 	res.sendStatus(200);
+	// } catch (err) {
+	// 	console.log(err);
+	// 	res.sendStatus(400);
+	// }
+
+	const fileRows = [];
+	const product = [];
+	const comp = [];
+	var count1 = 0;
+	VpiInventory.remove({}).exec();
+	csv
+		.fromPath(req.file.path)
+		.on('data', function(data) {
+			if (data[0] != 'Code') {
+				if (data[4] != '') {
+					var vpi = new VpiInventory();
+					vpi.Item_name = data[1];
+					vpi.item_code = data[0];
+					vpi.manfc_name = comp[comp.length - 1];
+					vpi.packing = data[2];
+					vpi.mrp = data[3];
+					vpi.distributor = 'mercury';
+					vpi.created_at = Date.now();
+					vpi.save();
+				} else {
+					comp.push(data[1]);
+				}
+				fileRows.push(data);
+			}
 		})
 		.on('end', function() {
 			message
@@ -596,7 +736,7 @@ app.get('/distributor', isLoggedIn, (req, res, next) => {
 		statusShipped = 0,
 		statusPacked = 0;
 	var list = [];
-	pharmacy.find({ distributor: 'tulsi' }).exec().then(function(pharm) {
+	pharmacy.find({ distributor: req.session.dist.ph_name }).exec().then(function(pharm) {
 		pharm.forEach((member) => {
 			list.push({
 				pharma_name: member.pharma_name,
@@ -687,6 +827,19 @@ app.get('/distributor', isLoggedIn, (req, res, next) => {
 	console.log(req.session.dist);
 });
 
+app.get('/distributor_state', (req, res, next) => {
+	pharmacy
+		.find()
+		.populate('area')
+		.exec()
+		.then((docs) => {
+			res.status(200).json({ docs: docs });
+		})
+		.catch((err) => {
+			res.status(200).json({ err: err });
+		});
+});
+
 app.get('/distributor_inventory', (req, res, next) => {
 	res.render('add_distributor_inventory');
 });
@@ -727,6 +880,10 @@ app.get('/distributor_order', isLoggedIn, (req, res, next) => {
 		.catch((err) => {
 			console.log(err);
 		});
+});
+
+app.get('/inventory_distributor', (req, res, next) => {
+	res.render('add_distributor_inventory');
 });
 
 app.post('/csvFile', (req, res, next) => {
@@ -960,7 +1117,7 @@ app.get('/vpimediceine', (Req, res, next) => {
 		});
 });
 
-app.get('/distributor_product', isLoggedIn, upload.single('csvdata'), (req, res, next) => {
+app.get('/distributor_product', upload.single('csvdata'), (req, res, next) => {
 	if (datah == 'Helow') {
 		console.log('Not');
 		res.render('distributor_product', {
