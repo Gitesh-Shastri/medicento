@@ -70,7 +70,7 @@
         </table>
         <strong><span style="color: black;cursor: pointer;width: 10%;margin-left: 700px;">Subtotal : ₹ </span></strong>
     </div>
-
+   <button type="submit" value="Submit"  onclick='show(1);'style="background-color: DodgerBlue;color: #fff;cursor: pointer;width: 10%;height: 40px;margin-left: 25px; margin-top:50px;">Submit</button>
 
 </main>
 
@@ -78,5 +78,10 @@
   $('button').click(function(e){
    $(this).closest('tr').remove()
 })
+
+function show(nr) {
+    document.getElementById("tableData").style.display="none";
+}
+
 
 </script>
