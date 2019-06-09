@@ -1,6 +1,15 @@
 <!---Table structure--->
 <main>
 <link rel="stylesheet" href="css/order_table.css">
+<style>
+.fixedHeight {
+        color:red;
+        font-size:10px;
+        max-height: 150px;
+        margin-bottom: 10px;
+        overflow-x: auto;
+        overflow-y: auto;
+    }</style>
 <!---table --->
 <div class="container">
     <div id="order_table" style="display: none;">
@@ -134,12 +143,13 @@
   <script>
   $( function() {
     var medicine = [
-      "dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24"
+      "dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24",
     ];
     $( "#auto" ).autocomplete({
       source: medicine
     });
   } );
+  $( "#auto" ).autocomplete("widget").addClass("fixedHeight");
   </script>
 
 <script>
