@@ -1,0 +1,22 @@
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 20px;
+  text-align: centre;
+}
+
+tbody{
+    height: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.btn {
+  background-color: red;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+}

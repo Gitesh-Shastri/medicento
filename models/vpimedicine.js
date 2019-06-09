@@ -41,6 +41,10 @@ const vpiMedicineSchema = mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
+	distributor: {
+		type: String,
+		default: '-'
+	},
 	unmapped: {
 		type: String,
 		default: 'NotMapped'

@@ -70,7 +70,7 @@
                     ]
                 }]
                 });
-            chart2.render(); 
+            chart2.render();
             }
         </script>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -94,16 +94,20 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/pharmacy"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li><a href="/pharmacy"><span class="glyphicon glyphicon-bell"></span></a></li>
-                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>       
-                <li><a href="/pharmacy"></a></li>     
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                <li><a href="/pharmacy"></a></li>
             </ul>
         </div>
         <!-- bs-example-navbar-collapse-1 -->
         </nav>
         <div id="wrapper">
-        <!-- Sidebar --> 
+        <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                <% if(title == 'Home') {  %> <li class="active">
+                <% } else {%> <li> <% } %>
+                    <a href="/pharmacy_home"><span class="fa-stack fa-lg pull-left"><i class="fa fa-home fa-stack-1x"></i></span> Home</a>
+                </li>
                 <% if(title == 'Dashboard') {  %> <li class="active">
                 <% } else {%> <li> <% } %>
                     <a href="/pharmacy"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span> Dashboard</a>
