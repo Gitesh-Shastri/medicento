@@ -9,7 +9,7 @@
             overflow-x: hidden;
             /* add padding to account for vertical scrollbar */
             padding-right: 20px;
-        } 
+        }
 </style>
 <!---table --->
 <div class="container">
@@ -145,23 +145,42 @@
   $( function() {
     var projects = [
 	{
-		name: "jquery",
-		label: "jQuery",
-		desc: "the write less, do more, JavaScript library",
-		icon: "jquery_32x32.png"
+		name: "dolo",
+		label: "Dolo",
+		desc: "200 mg , 10/pack, 25, 22, ---",
+		icon: "add.png"
 	},
 	{
-		value: "jquery-ui",
-		label: "jQuery UI",
-		desc: "the official user interface library for jQuery",
-		icon: "jqueryui_32x32.png"
+		value: "paracetamol",
+		label: "Paracetamol",
+        desc: "200 mg , 10/pack, 25, 22, ---",
+        icon: "add.png"
 	},
 	{
-		value: "sizzlejs",
-		label: "Sizzle JS",
-		desc: "a pure-JavaScript CSS selector engine",
-		icon: "sizzlejs_32x32.png"
-	}
+		value: "crocin",
+		label: "Crocin",
+		desc: "200 mg , 10/pack, 25, 22, ---",
+        icon: "add.png"
+	},
+    {
+        name: "dolo",
+        label: "Dolo",
+        desc: "200 mg , 10/pack, 25, 22, ---",
+        icon: "add.png"
+    },
+    {
+        value: "paracetamol",
+        label: "Paracetamol",
+        desc: "200 mg , 10/pack, 25, 22, ---",
+        icon: "add.png"
+    },
+    {
+        value: "crocin",
+        label: "Crocin",
+        desc: "200 mg , 10/pack, 25, 22, ---",
+        icon: "add.png"
+    },
+
 ];
 $( "#auto" ).autocomplete({
 	minLength: 1,
@@ -174,7 +193,7 @@ $( "#auto" ).autocomplete({
 		$( "#auto" ).val( ui.item.label );
 		$( "#auto-id" ).val( ui.item.value );
 		$( "#auto-description" ).html( ui.item.desc );
-		$( "#auto-icon" ).attr( "src", "images/" + ui.item.icon );
+		$( "#auto-icon" ).attr( "src", "img/" + ui.item.icon );
 
 		return false;
 	}
