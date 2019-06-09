@@ -143,12 +143,49 @@
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script>
   <script>
   $( function() {
-    var medicine = [
-      "dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24","dolo 250mg 10/pack 25 24", "dolo 250mg 10/pack 25 24","Dolo 250mg 10/pack 24 25 ","Dolo 250mg 10/pack 25 24",
-    ];
-    $( "#auto" ).autocomplete({
-      source: medicine
-    });
+    var projects = [
+	{
+		name: "jquery",
+		label: "jQuery",
+		desc: "the write less, do more, JavaScript library",
+		icon: "jquery_32x32.png"
+	},
+	{
+		value: "jquery-ui",
+		label: "jQuery UI",
+		desc: "the official user interface library for jQuery",
+		icon: "jqueryui_32x32.png"
+	},
+	{
+		value: "sizzlejs",
+		label: "Sizzle JS",
+		desc: "a pure-JavaScript CSS selector engine",
+		icon: "sizzlejs_32x32.png"
+	}
+];
+$( "#auto" ).autocomplete({
+	minLength: 1,
+	source: projects,
+	focus: function( event, ui ) {
+		$( "#auto" ).val( ui.item.label );
+		return false;
+	},
+	select: function( event, ui ) {
+		$( "#auto" ).val( ui.item.label );
+		$( "#auto-id" ).val( ui.item.value );
+		$( "#auto-description" ).html( ui.item.desc );
+		$( "#auto-icon" ).attr( "src", "images/" + ui.item.icon );
+
+		return false;
+	}
+})
+.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+	return $( "<li></li>" )
+		.data( "ui-autocomplete-item", item )
+		.append( "<table><tr><td>" + item.label + "</td><td>" + item.desc + "</td></tr></table>" )
+		.appendTo( ul );
+};
+
   } );
   </script>
 
