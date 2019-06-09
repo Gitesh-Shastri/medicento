@@ -2,14 +2,15 @@
 <main>
 <link rel="stylesheet" href="css/order_table.css">
 <style>
-.fixedHeight {
-        color:red;
-        font-size:10px;
-        max-height: 150px;
-        margin-bottom: 10px;
-        overflow-x: auto;
-        overflow-y: auto;
-    }</style>
+    .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            /* add padding to account for vertical scrollbar */
+            padding-right: 20px;
+        } 
+</style>
 <!---table --->
 <div class="container">
     <div id="order_table" style="display: none;">
@@ -149,7 +150,6 @@
       source: medicine
     });
   } );
-  $( "#auto" ).autocomplete("widget").addClass("fixedHeight");
   </script>
 
 <script>
