@@ -5,6 +5,17 @@
                         <div style="background: rgb(34,34,34);height: 2px;"></div>
                         <h4>Today: <%= moment(date).format('DD/MM/YY') %></h4>
                         <div class="row">
+                          <div class="col-xs-12 col-md-6 col-lg-4" style="height: 500px; ">
+                            <label>Enter Medicine:</label>
+                            <input id="searchField" type="text" name="medicineSearch">
+
+                            <span id="searchStatus" > status</span>
+
+                            <div id="searchResult" > Result</div>
+
+                            </div>
+                          </div>
+                        <div class="row">
                             <div class="col-xs-12 col-md-6 col-lg-4" style="height: 240px;">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
@@ -102,6 +113,38 @@
                     </div>
             </div>
             <!-- /#wrapper -->
+            <script type="text/javascript">
+
+
+               $('#searchField').keypress(function(e){
+                  var searchString = $('#searchField').val();
+                  // if( searchString.length < 3){
+                  //    $("#searchStatus").val() = "Returned Due to less Chars or Not Enter!";
+                  //      res.status(200).json({
+                  //        message : "String Length small"
+                  //      });
+                  //     //return;
+                  // }
+                  // if(e.keyCode == 13)
+                  // {
+                    $.ajax({
+                    url : '/searchMedi/' + searchString,
+                    type : 'GET',
+                    success : function(result){
+                         // $.each(result.data , function(index){
+                         //   alert(result[0].Item_name);
+                         // });
+                         $("#searchStatus").html("Result Fetched");
+                    }
+                  })
+                //}
+                  //$.get('/searchMedi/' + searchString, function(data){
+
+
+                  }
+
+            </script>
+
             <script src="js/jquery-3.3.1.min.js"></script>
             <script src="js/pharma.js"></script>
         </body>
