@@ -35,12 +35,16 @@ const pharmaSchema = mongoose.Schema({
 		default: "-"
 	},
 	pincode: {
-		type: String,
-		default: "-"	
+		type: String
+	},
+	created_at:{
+		
+		type: Date,
+		default: Date.now()
 	},
 	pan_card: {
 		type: String,
-		default: "-"	
+		default: "-"
 	},
 	distributor: {
 		type: String,

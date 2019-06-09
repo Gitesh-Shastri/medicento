@@ -7,7 +7,19 @@ $("#menu-toggle").click(function(e) {
     $("#wrapper").toggleClass("toggled-2");
     $('#menu ul').hide();
  });
- 
+ //
+ // $('#searchField').keyup(function(e){
+ //
+ //   clearTimeout($.data(this ,'timer'));
+ //   if(e.keyCode == 13)
+ //   {
+ //     search(true);
+ //     $("#searchStatus").val() = "Enter Hit!";
+ //   }
+ //   else
+ //   $(this).data('timer',setTimeout(search , 500));
+ //  });
+
  function initMenu() {
     $('#menu ul').hide();
     $('#menu ul').children('.current').parent().show();

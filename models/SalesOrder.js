@@ -5,8 +5,16 @@ const SalesOrderSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'SalesOrder'
 	},
+	order_slot: {
+		type: String,
+		default: "-"
+	},
 	sales_order_code: {
 		type: String
+	},
+	source: {
+		type: String,
+		default: "-"
 	},
 	sales_order_parent_code: {
 		type: String
@@ -24,6 +32,14 @@ const SalesOrderSchema = mongoose.Schema({
 	},
 	payment_id: {
 		type: String
+	},
+	distributor_order_id: {
+		type: String,
+		default: '-'
+	},
+	distributor_invoice_id: {
+		type: String,
+		default: '-'
 	},
 	order_code: {
 		type: String

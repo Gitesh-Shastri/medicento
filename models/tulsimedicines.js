@@ -44,14 +44,6 @@ const tulsiMedicineSchema = mongoose.Schema({
     ProHsnNo: {
         type: String,
         default: "-"    
-    },
-    scheme: {
-        type: String,
-        default: "-"        
-    },
-    ptr: {
-        type: Number,
-        default: 0    
     }
 });
 
