@@ -7,7 +7,7 @@
                         <div class="row">
                           <div class="col-xs-12 col-md-6 col-lg-4" style="height: 500px; ">
                             <label>Enter Medicine:</label>
-                            <input id="searchField" type="text" name="medicineSearch">
+                            <input id="searchField" type="text" name="medicineSearch" onchange="checkInput()">
 
                             <span id="searchStatus" > status</span>
 
@@ -115,18 +115,9 @@
             <!-- /#wrapper -->
             <script type="text/javascript">
 
-
-               $('#searchField').keypress(function(e){
-                  var searchString = $('#searchField').val();
-                  // if( searchString.length < 3){
-                  //    $("#searchStatus").val() = "Returned Due to less Chars or Not Enter!";
-                  //      res.status(200).json({
-                  //        message : "String Length small"
-                  //      });
-                  //     //return;
-                  // }
-                  // if(e.keyCode == 13)
-                  // {
+                function checkInput() {
+                    var searchString = $('#searchField').val();
+                    console.log($('#searchField').val());
                     $.ajax({
                     url : '/searchMedi/' + searchString,
                     type : 'GET',
@@ -137,11 +128,35 @@
                          $("#searchStatus").html("Result Fetched");
                     }
                   })
-                //}
-                  //$.get('/searchMedi/' + searchString, function(data){
+                }
+
+            //    $('#searchField').keypress(function(e){
+            //        console.log($('#searchField').val());
+            //       var searchString = $('#searchField').val();
+            //       // if( searchString.length < 3){
+            //       //    $("#searchStatus").val() = "Returned Due to less Chars or Not Enter!";
+            //       //      res.status(200).json({
+            //       //        message : "String Length small"
+            //       //      });
+            //       //     //return;
+            //       // }
+            //       // if(e.keyCode == 13)
+            //       // {
+            //         $.ajax({
+            //         url : '/searchMedi/' + searchString,
+            //         type : 'GET',
+            //         success : function(result){
+            //              // $.each(result.data , function(index){
+            //              //   alert(result[0].Item_name);
+            //              // });
+            //              $("#searchStatus").html("Result Fetched");
+            //         }
+            //       })
+            //     //}
+            //       //$.get('/searchMedi/' + searchString, function(data){
 
 
-                  }
+            //       }
 
             </script>
 

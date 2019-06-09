@@ -21,13 +21,11 @@ const tulsimedicines = require('./models/tulsimedicines');
 const medicento_medicines = require('./models/medicento_medicine');
 const Dist = require('./models/Inventory');
 
-mongoose.connect(MONGODB_URI,{	useNewUrlParser: true },function() {
-
-const Medicento_pharmacy = require('./models/medicento_pharmacy');
-mongoose.connect(MONGODB_URI, function() {
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, function() {
 	console.log('connected to DB');
-
 });
+const Medicento_pharmacy = require('./models/medicento_pharmacy');
+
 mongoose.Promise = global.Promise;
 var tulsipharma = require('./models/tulsimedicines');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
@@ -43,8 +41,7 @@ var doc1 = undefined;
 
 var serviceAccount = require('./public/medicentomessaging-firebase-adminsdk-rkrq1-df71338e06.json');
 
-
- admin.initializeApp({
+admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 	databaseURL: 'https://medicentomessaging.firebaseio.com'
 });
@@ -71,26 +68,23 @@ var upload = multer({
 });
 const upload1 = multer();
 
-app.get('/searchMedi/:searchString',(req,res,next)=>{
+app.get('/searchMedi/:searchString', (req, res, next) => {
 	const itemName = req.params.searchString;
-	VpiInventory
-	.find( {Item_name : new RegExp('' + itemName + '' , 'i')})
-	.limit(5)
-	.sort({Item_name : 1 })
-	.exec()
-	.then(data =>{
-		console.log("Received on search: " + itemName + data);
-		res.status(200).json(data);
-
-	})
-	.catch(err=>{
-		console.log(err);
-		res.status(500).json({
-			message : "Not Found"
+	VpiInventory.find({ Item_name: new RegExp('' + itemName + '', 'i') })
+		.limit(5)
+		.sort({ Item_name: 1 })
+		.exec()
+		.then((data) => {
+			console.log('Received on search: ' + itemName + data);
+			res.status(200).json(data);
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				message: 'Not Found'
+			});
 		});
-	});
 });
-
 
 app.get('/update', (req, res, next) => {
 	pharmacy
