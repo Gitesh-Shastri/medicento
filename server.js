@@ -24,7 +24,7 @@ const Dist = require('./models/Inventory');
 mongoose.connect(MONGODB_URI,{	useNewUrlParser: true },function() {
 
 const Medicento_pharmacy = require('./models/medicento_pharmacy');
-mongoose.connect(MONGODB_URI, function() {
+
 	console.log('connected to DB');
 
 });
@@ -71,19 +71,21 @@ var upload = multer({
 });
 const upload1 = multer();
 
-app.get('/searchMedi/:searchString',(req,res,next)=>{
-	const itemName = req.params.searchString;
-	VpiInventory
-	.find( {Item_name : new RegExp('' + itemName + '' , 'i')})
-	.limit(5)
-	.sort({Item_name : 1 })
-	.exec()
-	.then(data =>{
-		console.log("Received on search: " + itemName + data);
-		res.status(200).json(data);
 
-	})
-	.catch(err=>{
+app.get('/searchMedi/:searchString',(req ,res , next)=>{
+		const itemName = req.params.searchString;
+		console.log(itemName);
+		VpiInventory
+		.find( {Item_name : new RegExp('' + itemName + '' , 'i')})
+		.limit(6)
+		//.select( 'Item_name','packing)
+		.sort({Item_name : 1 })
+		.exec()
+		.then(data =>{
+			console.log("Received on search: " + itemName);
+			res.status(200).json(data);
+			})
+		.catch(err=>{
 		console.log(err);
 		res.status(500).json({
 			message : "Not Found"
