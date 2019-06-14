@@ -149,39 +149,57 @@
   $( function() {
     var projects = [
 	{
-		name: "dolo",
-		label: "Dolo",
-		desc: "200 mg , 10/pack, 25, 22, ---",
+		name: "dolo 200 mg",
+		label: "Dolo 200 mg",
+		desc: "10/pack",
+        mrp: "25",
+        ptr: "22",
+        scheme: "-",
 		icon: "img/add.png"
 	},
 	{
-		value: "paracetamol",
-		label: "Paracetamol",
-        desc: "200 mg , 10/pack, 25, 22, ---",
+		value: "paracetamol 200 mg",
+		label: "Paracetamol 200 mg",
+        desc: "10/pack",
+        mrp: "25",
+        ptr: "22",
+        scheme: "-",
         icon: "img/add.png"
 	},
 	{
-		value: "crocin",
-		label: "Crocin",
-		desc: "200 mg , 10/pack, 25, 22, ---",
+		value: "crocin 200 mg",
+		label: "Crocin 200 mg",
+		desc: "10/pack",
+        mrp: "25",
+        ptr: "22",
+        scheme: "-",
         icon: "img/add.png"
 	},
     {
-        name: "dolo",
-        label: "Dolo",
-        desc: "200 mg , 10/pack, 25, 22, ---",
+        name: "dolo 200 mg",
+        label: "Dolo 200 mg",
+        desc: "10/pack",
+        mrp: "25",
+        ptr: "22",
+        scheme: "-",
         icon: "img/add.png"
     },
     {
-        value: "paracetamol",
-        label: "Paracetamol",
-        desc: "200 mg , 10/pack, 25, 22, ---",
+        value: "paracetamol 200 mg",
+        label: "Paracetamol 200 mg",
+        desc: "10/pack",
+        mrp: "25",
+        ptr: "22",
+        scheme: "-",
         icon: "img/add.png"
     },
     {
-        value: "crocin",
-        label: "Crocin",
-        desc: "200 mg , 10/pack, 25, 22, ---",
+        value: "crocin 200 mg",
+        label: "Crocin 200 mg",
+        desc: "10/pack",
+        mrp: "25",
+        ptr: "22",
+        scheme: "-",
         icon: "img/add.png"
     },
 
@@ -196,6 +214,9 @@ $( "#auto" ).autocomplete({
 	select: function( event, ui ) {
 		$( "#auto" ).val( ui.item.label );
 		$( "#auto-id" ).val( ui.item.value );
+        $( "#auto-mrp" ).val( ui.item.mrp );
+        $( "#auto-ptr" ).val( ui.item.ptr );
+        $( "#auto-scheme" ).val( ui.item.scheme );
 		$( "#auto-description" ).html( ui.item.desc );
 		$( "#auto-icon" ).attr( "src", "img/" + ui.item.icon );
 
@@ -205,7 +226,7 @@ $( "#auto" ).autocomplete({
 .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 	return $( "<li></li>" )
 		.data( "ui-autocomplete-item", item )
-		.append( "<table><tr><td>" + item.label + "</td><td>" + item.desc + "</td><td>" +item.icon +"</td></tr></table>" )
+		.append( "<table><tr><td>" + item.label + "</td><td>" + item.desc + "</td><td>" + item.mrp + "</td><td>" + item.ptr + "</td><td>" + item.scheme + "</td><td><img src='" +item.icon +"' height='25' width='40' onclick='addMedicines("+item+")'/></td></tr></table>" )
 		.appendTo( ul );
 };
 
@@ -228,8 +249,8 @@ function show(nr) {
     $('#order_table').hide();
 }
 
-function addMedicines(name, desc) {
-    aler('name');
+function addMedicines() {
+
 }
 
 $(document).ready(function() {
