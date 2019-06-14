@@ -148,37 +148,37 @@
 		name: "dolo",
 		label: "Dolo",
 		desc: "200 mg , 10/pack, 25, 22, ---",
-		icon: "add.png"
+		icon: "img/add.png"
 	},
 	{
 		value: "paracetamol",
 		label: "Paracetamol",
         desc: "200 mg , 10/pack, 25, 22, ---",
-        icon: "add.png"
+        icon: "img/add.png"
 	},
 	{
 		value: "crocin",
 		label: "Crocin",
 		desc: "200 mg , 10/pack, 25, 22, ---",
-        icon: "add.png"
+        icon: "img/add.png"
 	},
     {
         name: "dolo",
         label: "Dolo",
         desc: "200 mg , 10/pack, 25, 22, ---",
-        icon: "add.png"
+        icon: "img/add.png"
     },
     {
         value: "paracetamol",
         label: "Paracetamol",
         desc: "200 mg , 10/pack, 25, 22, ---",
-        icon: "add.png"
+        icon: "img/add.png"
     },
     {
         value: "crocin",
         label: "Crocin",
         desc: "200 mg , 10/pack, 25, 22, ---",
-        icon: "add.png"
+        icon: "img/add.png"
     },
 
 ];
@@ -201,7 +201,7 @@ $( "#auto" ).autocomplete({
 .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 	return $( "<li></li>" )
 		.data( "ui-autocomplete-item", item )
-		.append( "<table><tr><td>" + item.label + "</td><td>" + item.desc + "</td></tr></table>" )
+		.append( "<table onclick='addMedicines()'><tr><td>" + item.label + "</td><td>" + item.desc + "</td><td><img src='" + item.icon + "' width='50px' height='40px'/></td></tr></table>" )
 		.appendTo( ul );
 };
 
@@ -222,6 +222,10 @@ $('#order_table').show();
 
 function show(nr) {
     $('#order_table').hide();
+}
+
+function addMedicines(name, desc) {
+    aler('name');
 }
 
 $(document).ready(function() {
