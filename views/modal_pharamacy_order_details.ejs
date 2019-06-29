@@ -1,14 +1,18 @@
 <!-- layout for details of order-->
-        <% include pharmacy_header %>
-        <div class="content" style="margin: 10px;">
-                            <div class="panel panel-default panel-table" style="padding: 2%">
-                                    <div class="panel-heading" style="width:70%; margin-left:150px; display: inline-block;border:solid;">
-                                        <strong><span style="text-align: left; margin-left:80px;">Order No:- 23333</span></strong>
-                                        <strong><span style="text-align: right; margin-left:160px;">Date :10-May-2019</span></strong>
-                                    </div>
-                                    <div class="panel-body" style="margin-top:20px;">
-                        <table id="or" class="table table-striped table-hover table-fw-widget" style="width: 100%">
-                            <thead>
+ <% include pharmacy_header %>
+<div id="v" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-warning" style = "font-family: Time new roman;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="font-family:Time New Roman;width:70%; margin-left:150px; display: inline-block;border:solid;">
+                <strong><span style="text-align: left; margin-left:80px;">Order No:- 23333</span></strong>
+                <strong><span style="text-align: right; margin-left:160px;">Date :10-May-2019</span></strong>
+            </div>
+            <div class="modal-body" style="font-family:Time New Roman;">
+                    <!--------- Order detail table ------------ -->
+                    <div class="row">
+                        <div class="col-xs-12 table-responsive">
+                            <table id="or" class="table table-striped table-hover table-fw-widget" style="width: 100%">
+                                <thead>
                                 <tr>
                                     <th>S No.</th>
                                     <th>Item Code</th>
@@ -68,13 +72,18 @@
                                       </td>
                                 </tr>
                             </tbody>
-                        </table>
+                            </table>
                         </div>
                         <strong><span style="color: black;cursor: pointer;width: 10%;margin-left: 700px;">Grandtotal : ₹ </span></strong>
-                        </div>
                     </div>
+                <div class="modal-footer">
+                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-            <script src="js/jquery-3.3.1.min.js"></script>
+    </div>
+</div>
+<script src="js/jquery-3.3.1.min.js"></script>
             <script src="js/pharma.js"></script>
             <script src="js/dataTables.js"></script>
             <script ></script>
@@ -83,5 +92,5 @@
                     $('#or').DataTable();
                 });
             </script>
-        </body>
-</html>
+
+
