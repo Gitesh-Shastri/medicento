@@ -35,16 +35,17 @@
                                     <%}) %></td>
                                     <td><strong><%= orders.grand_total %></strong></td>
                                     <td><strong ><%= orders.status %></strong></td>
-                                    <td><button class="btn btn-primary" data-target="#or">View</button></td>
+                                    <td><button class="btn btn-primary" data-toggle="modal" data-target="#or<%= orders._id%>">View</button></td>
                                 </tr>
                                 <% }) %>
                             </tbody>
                         </table>
+                        <% include modal_pharamacy_order_details.ejs %>
                         </div>
                         </div>
                     </div>
         </div>
-        <% include pharamacy_order_details.ejs %>
+
             <script src="js/jquery-3.3.1.min.js"></script>
             <script src="js/pharma.js"></script>
             <script src="js/dataTables.js"></script>
