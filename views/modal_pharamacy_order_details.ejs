@@ -1,6 +1,6 @@
 <!-- layout for details of order-->
- <% include pharmacy_header %>
-<div id="v" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-warning" style = "font-family: Time new roman;">
+<% docu.forEach((orders) => { %>
+<div id="v<%= orders._id %>" tabindex="-1" role="dialog" class="modal colored-header colored-header-warning" style = "font-family: Time new roman;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="font-family:Time New Roman;width:70%; margin-left:150px; display: inline-block;border:solid;">
@@ -83,14 +83,6 @@
         </div>
     </div>
 </div>
-<script src="js/jquery-3.3.1.min.js"></script>
-            <script src="js/pharma.js"></script>
-            <script src="js/dataTables.js"></script>
-            <script ></script>
-            <script>
-                $(document).ready(function() {
-                    $('#or').DataTable();
-                });
-            </script>
+<% }) %>
 
 
