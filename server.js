@@ -515,41 +515,90 @@ app.get('/retailer_page', isLoggedIn, (req, res, next) => {
 	}
 });
 
-app.post('/upload_tulsi', upload.single('csvdata'), function(req, res, next) {
-	const fileRows = [];
-	const product = [];
-	const comp = [];
-	var count1 = 0;
-	VpiInventory.remove({}).exec();
-	csv
-		.fromPath(req.file.path)
-		.on('data', function(data) {
-			let data_new = data[0].split('|');
-			let tulsipharma1 = new VpiInventory();
-			vpi.Item_name = data[1];
-			vpi.item_code = data[0];
-			vpi.manfc_name = data[8];
-			vpi.packing = data[3];
-			vpi.mrp = data[5];
-			vpi.distributor = 'tulsi';
-			vpi.created_at = Date.now();
-			tulsipharma1.save();
+app.post('/api/upload', upload.single('csvdata'), function(req, res) {
+	if (req.session.dist.email == 'swara@gmail.com') {
+		VpiInventory.remove({ distributor: 'swara' }).exec();
+		csv
+			.fromPath(req.file.path)
+			.on('data', function(data) {
+				var vpi = new VpiInventory();
+				vpi.Item_name = data[2];
+				vpi.item_code = data[3];
+				vpi.manfc_name = data[1];
+				vpi.packing = '-';
+				vpi.mrp = 0;
+				vpi.distributor = 'swara';
+				vpi.created_at = Date.now();
+				vpi.save();
+			})
+			.on('end', function() {
+				res.status(200).json('Uploaded');
+			});
+	} else if (req.session.dist.email == 'sriparshva') {
+		VpiInventory.remove({ distributor: 'parshva' }).exec();
+		csv
+			.fromPath(req.file.path)
+			.on('data', function(data) {
+				var vpi = new VpiInventory();
+				vpi.Item_name = data[1];
+				vpi.item_code = data[0];
+				vpi.manfc_name = data[3];
+				vpi.packing = data[4];
+				vpi.mrp = data[5];
+				vpi.distributor = 'parshva';
+				vpi.created_at = Date.now();
+				vpi.save();
+			})
+			.on('end', function() {
+				res.status(200).json('Uploaded');
+			});
+	}
+});
+
+app.get('/distributor_with_pass', (req, res, next) => {
+	Dist.find()
+		.exec()
+		.then((doc) => {
+			res.status(200).json(doc);
 		})
-		.on('end', function() {
-			message
-				.find()
-				.exec()
-				.then((mess) => {
-					mess[0].count = mess[0].count + 1;
-					mess[0].save();
-					console.log(mess[0]);
-				})
-				.catch();
-			datah = fileRows.splice(0, 100);
-			res.status(200).json(datah);
-			// remove temp file
-			//process "fileRows" and respond
-		});
+		.catch((err) => {});
+});
+
+app.post('/upload_tulsi', upload.single('csvdata'), function(req, res, next) {
+	// const fileRows = [];
+	// const product = [];
+	// const comp = [];
+	// var count1 = 0;
+	// VpiInventory.remove({}).exec();
+	// csv
+	// 	.fromPath(req.file.path)
+	// 	.on('data', function(data) {
+	// 		let data_new = data[0].split('|');
+	// 		let tulsipharma1 = new VpiInventory();
+	// 		vpi.Item_name = data[1];
+	// 		vpi.item_code = data[0];
+	// 		vpi.manfc_name = data[8];
+	// 		vpi.packing = data[3];
+	// 		vpi.mrp = data[5];
+	// 		vpi.distributor = 'tulsi';
+	// 		vpi.created_at = Date.now();
+	// 		tulsipharma1.save();
+	// 	})
+	// 	.on('end', function() {
+	// 		message
+	// 			.find()
+	// 			.exec()
+	// 			.then((mess) => {
+	// 				mess[0].count = mess[0].count + 1;
+	// 				mess[0].save();
+	// 				console.log(mess[0]);
+	// 			})
+	// 			.catch();
+	// 		datah = fileRows.splice(0, 100);
+	// 		res.status(200).json(datah);
+	// 		// remove temp file
+	// 		//process "fileRows" and respond
+	// 	});
 });
 
 app.post('/upload_parshva', upload.single('csvdata'), function(req, res, next) {

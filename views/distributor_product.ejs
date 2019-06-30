@@ -51,17 +51,18 @@
                         </div>
                     </div>
                     <section id="upload-data-panel">
-                        <form id="upload-form" action="/upload_tulsi" method="post" enctype="multipart/form-data">
+                        <h2 id="status"></h2>
+                        <form id="upload-form" action="api/upload" method="post" enctype="multipart/form-data">
                             <fieldset>
                                 <legend>Upload Data1</legend>
                                 <div>
-                                    <!-- The name here is important, and will be used later to reference the data -->
                                     <input type="file" name="csvdata" accept=".csv" id="file">
                                 </div><br>
                                 <div>
                                     <input id="submit" class="btn btn-primary" type="submit" value="Upload">
                                 </div>
                             </fieldset>
+                            <img id="loader"  style="display: none;" src="https://loading.io/spinners/typing/lg.-text-entering-comment-loader.gif" alt="" height="50" width="50">
                         </form>
                     </section>
                     </div>
@@ -108,6 +109,27 @@
                 <% }); %>
                 $('tbody').append(rows);
                 $('#porder').dataTable();
+            </script>
+            <script>
+                $('#upload-form').submit(function(event) {
+
+                    $('#loader').show();
+                    /* stop form from submitting normally */
+                    event.preventDefault();
+                    console.log(this);
+                    $.ajax({
+                        url: "api/upload",
+                        type: "POST",
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false,
+                        success: function(data)
+                            { 
+                                $('#loader').hide();
+                                alert(data); 
+                            }
+                    });
+                });
             </script>
     </body>
 </html>
