@@ -4,17 +4,13 @@
             <div class="panel panel-default panel-table" style="padding: 2%">
                 <div class="panel-heading" style="text-align: center; margin-left:-20px;">
                                     <div class="container">
-                                    <!--<form>
+                                    <form>
                                     <div  style="border:solid;width:50%;margin-left:-100px; display: inline-block;">
                                     From: <input type="date" id="myDate" value="yyyy-mm-dd">
                                     To: <input type="date" id="myDate" value="yyyy-mm-dd">
                                      </div>
                                     <button type="submit" style="background-color: DodgerBlue;color: #fff;cursor: pointer;width: 15%;height: 40px;margin-left: -7px;"><i class="fa fa-search"></i></button>
-                                    </form>-->
-                                    <p id="date_filter">
-                                        <span id="date-label-from" class="date-label">From: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
-                                        <span id="date-label-to" class="date-label"> To: <input class="date_range_filter date" type="text" id="datepicker_to" />
-                                    </p>
+                                    </form>
                     </div>
                 </div>
                 <div class="panel-body" style="margin-top:20px;">
@@ -23,7 +19,6 @@
                             <tr>
                               <th>Order No</th>
                               <th>Order Date</th>
-                              <th>Products</th>
                               <th>Total</th>
                               <th>Status</th>
                               <th>Details</th>
@@ -34,9 +29,6 @@
                                 <tr>
                                     <td><strong><%= orders._id %></strong></td>
                                     <td><strong><%= moment(orders.created_at).format('LLLL') %></strong></td>
-                                    <td><% orders.order_items.forEach((order) => { %>
-                                        <strong><%= order.medicento_name %> * <%= order.quantity %></strong><br/>
-                                    <%}) %></td>
                                     <td><strong><%= orders.grand_total %></strong></td>
                                     <td><strong ><%= orders.status %></strong></td>
                                     <td><button class="btn btn-primary" data-toggle="modal" data-target="#v<%= orders._id %>" onclick="showModal('<%= orders._id %>')">View</button></td>
@@ -63,73 +55,7 @@
                     $('#porder').DataTable();
                 });
             </script>
-
-<script>
-$(function() {
-  var oTable = $('#porder').DataTable({
-    "oLanguage": {
-      "sSearch": "Filter Data"
-    },
-    "iDisplayLength": -1,
-    "sPaginationType": "full_numbers",
-  });
-
-       $("#datepicker_from").datepicker({
-    showOn: "button",
-    buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
-    buttonImageOnly: false,
-    "onSelect": function(date) {
-      minDateFilter = new Date(date).getTime();
-      oTable.fnDraw();
-    }
-  }).keyup(function() {
-    minDateFilter = new Date(this.value).getTime();
-    oTable.fnDraw();
-  });
-        $("#datepicker_to").datepicker({
-    showOn: "button",
-    buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
-    buttonImageOnly: false,
-    "onSelect": function(date) {
-      maxDateFilter = new Date(date).getTime();
-      oTable.fnDraw();
-    }
-  }).keyup(function() {
-    maxDateFilter = new Date(this.value).getTime();
-    oTable.fnDraw();
-  });
-
-});
-
-minDateFilter = "";
-maxDateFilter = "";
-
-$.fn.dataTableExt.afnFiltering.push(
-  function(oSettings, aData, iDataIndex) {
-    if (typeof aData._date == 'undefined') {
-      aData._date = new Date(aData[0]).getTime();
-    }
-
-    if (minDateFilter && !isNaN(minDateFilter)) {
-      if (aData._date < minDateFilter) {
-        return false;
-      }
-    }
-
-    if (maxDateFilter && !isNaN(maxDateFilter)) {
-      if (aData._date > maxDateFilter) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-);
-
-</script>
-
-
-        </body>
+     </body>
 </html>
 <!----- previous layout
         <div class="content" style="margin: 10px;">
