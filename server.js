@@ -168,7 +168,7 @@ app.post('/login', (req, res, next) => {
 				.exec()
 				.then((doc2) => {
 					doc1 = doc2;
-					res.redirect('/pharmacy');
+					res.redirect('/pharmacy_home');
 				})
 				.catch((err) => {
 					res.redirect('/pharmacy_login');
@@ -176,6 +176,22 @@ app.post('/login', (req, res, next) => {
 		})
 		.catch((err) => {
 			res.redirect('/pharmacy_login');
+		});
+});
+
+app.post('/get_medicines_data/:search_name/', (req, res, next) => {
+	VpiInventory.find({ distributor: 'parshva', Item_name: new RegExp('' + req.params.search_name + '', 'i') })
+		.sort({ Item_name: 1 })
+		.select('Item_name manfc_name mrp qty item_code packing discount offer_qty')
+		.exec()
+		.then((docs) => {
+			res.status(200).json({ docs: docs });
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
 		});
 });
 
@@ -319,37 +335,12 @@ app.get('/pharmacy_orders', (req, res, next) => {
 
 app.get('/pharmacy_home', (req, res, next) => {
 	const title = 'Home';
-	// if (doc1 == undefined) {
-	// 	res.redirect('/pharmacy_login');
-	// }
 	active = 'index';
-	activeOrders = [];
-	cancelOrders = [];
-	Products.find()
-		.populate('pharmacy_id')
-		.populate('order_items')
-		.exec()
-		.then((orders) => {
-			orders.forEach((order) => {
-				if (order.status == 'Active') {
-					activeOrders.push(order);
-				}
-				if (order.status == 'Canceled') {
-					cancelOrders.push(order);
-				}
-			});
-			res.render('pharmacy_home', {
-				title: title,
-				doc: doc1,
-				orders: orders,
-				active: active,
-				activeOrders: activeOrders,
-				cancelOrders: cancelOrders
-			});
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+	res.render('pharmacy_home', {
+		title: title,
+		doc: doc1,
+		active: active
+	});
 });
 
 app.get('/pharmacy_product', (req, res, next) => {
@@ -534,20 +525,24 @@ app.post('/api/upload', upload.single('csvdata'), function(req, res) {
 			.on('end', function() {
 				res.status(200).json('Uploaded');
 			});
-	} else if (req.session.dist.email == 'sriparshva') {
+	} else if (req.session.dist.email == 'parshvamed') {
 		VpiInventory.remove({ distributor: 'parshva' }).exec();
 		csv
 			.fromPath(req.file.path)
 			.on('data', function(data) {
-				var vpi = new VpiInventory();
-				vpi.Item_name = data[1];
-				vpi.item_code = data[0];
-				vpi.manfc_name = data[3];
-				vpi.packing = data[4];
-				vpi.mrp = data[5];
-				vpi.distributor = 'parshva';
-				vpi.created_at = Date.now();
-				vpi.save();
+				if (data[1] != 'Product_Name') {
+					var vpi = new VpiInventory();
+					vpi.Item_name = data[1];
+					vpi.item_code = data[0];
+					vpi.manfc_name = data[3];
+					vpi.packing = data[4];
+					vpi.mrp = data[5];
+					vpi.discount = data[10];
+					vpi.offer_qty = data[9];
+					vpi.distributor = 'parshva';
+					vpi.created_at = Date.now();
+					vpi.save();
+				}
 			})
 			.on('end', function() {
 				res.status(200).json('Uploaded');

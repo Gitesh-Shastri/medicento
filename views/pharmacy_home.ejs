@@ -1,19 +1,41 @@
-<!-- retailers home page-->
 <% include pharmacy_portal.ejs %>
-  <!---search bar--->
-<main>
-<div class="container">
-<form autocomplete="off" action="/pharmacy_home" id="form" size="2" style="overflow -y:auto;">
-  <div class="autocomplete" style="width:300px;position: relative; display: inline-block; overflow -y:auto;">
-    <input id="auto" type="text" placeholder="Search Your Medicine" style="border: 1px solid black;background-color: #f1f1f1; padding: 10px; font-size: 16px;margin-left: 30px;width: 205%;">
-  </div>
-  <button type="submit" style="background-color: DodgerBlue;color: #fff;cursor: pointer;width: 10%;height: 47px;margin-left: 340px;"><i class="fa fa-search"></i></button>
-</form>
-</div>
-
-<% include pharmacy_home_orderTable.ejs %>
-
-</main>
-
+  <style>
+    .search_medicine {
+      margin: 10px;
+    }
+  </style>
+  <main>
+      <form class="search_medicine" id="search_medicine_form">
+          <div class="form-group">
+            <label for="medicine">Enter Medicine</label>
+            <input type="text" class="form-control" id="medicine" aria-describedby="medicine" placeholder="Enter Medicine">
+          </div>
+        </form>
+  </main>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/pharma.js"></script>
+    <script src="js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
+    <script>  
+      $('#medicine').on('input', function() {
+        var value = $('#medicine').val();
+        var request = $.ajax({
+        url: "/get_medicines_data/"+value,
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+      });
+      request.done(function(msg) {
+        console.log(msg)
+      });
+      request.fail(function(jqXHR, textStatus) {
+        alert( "Request failed: " + textStatus );
+      });
+      });
+      $('#search_medicine_form').submit(function(e) {
+          e.preventDefault();
+      });
+  </script>
 </body>
 </html>
